@@ -1,0 +1,12 @@
+# IDE Specific
+*vscode*
+
+# Frontend
+node_modules/
+
+# Go
+*.exe
+*.out
+*.test
+*.tmp
+*.log
