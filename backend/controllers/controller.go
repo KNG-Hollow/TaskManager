@@ -10,6 +10,36 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func AddAccount(c *gin.Context) {
+	var account models.Account
+
+	if err := c.BindJSON(&account); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+	} else {
+		res, err := service.AddAccount(account)
+		if !res && err != nil {
+			c.AbortWithError(http.StatusBadRequest, err)
+			log.Panicln("Service Failed To Add Account To Database:", err.Error())
+		}
+		c.JSON(http.StatusCreated, account)
+	}
+}
+
+func AddTask(c *gin.Context) {
+	var task models.Task
+
+	if err := c.BindJSON(&task); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+	} else {
+		res, err := service.AddTask(task)
+		if !res && err != nil {
+			c.AbortWithError(http.StatusBadRequest, err)
+			log.Panicln("Service Failed To Add Task To Database:", err.Error())
+		}
+		c.JSON(http.StatusCreated, task)
+	}
+}
+
 func GetAccounts(c *gin.Context) {
 	accounts, err := service.GetAccounts()
 	if err != nil {
@@ -77,36 +107,6 @@ func GetTask(c *gin.Context) {
 		c.JSON(http.StatusOK, task)
 	}
 
-}
-
-func AddAccount(c *gin.Context) {
-	var account models.Account
-
-	if err := c.BindJSON(&account); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-	} else {
-		res, err := service.AddAccount(account)
-		if !res && err != nil {
-			c.AbortWithError(http.StatusBadRequest, err)
-			log.Panicln("Service Failed To Add Account To Database:", err.Error())
-		}
-		c.JSON(http.StatusCreated, account)
-	}
-}
-
-func AddTask(c *gin.Context) {
-	var task models.Task
-
-	if err := c.BindJSON(&task); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-	} else {
-		res, err := service.AddTask(task)
-		if !res && err != nil {
-			c.AbortWithError(http.StatusBadRequest, err)
-			log.Panicln("Service Failed To Add Task To Database:", err.Error())
-		}
-		c.JSON(http.StatusCreated, task)
-	}
 }
 
 func UpdateAccount(c *gin.Context) {

@@ -23,8 +23,8 @@ func TestAccountService(t *testing.T) {
 		Name:     "test",
 		Username: "test",
 		Password: "test",
-		Admin:    true,
-		Active:   true,
+		Admin:    false,
+		Active:   false,
 	}
 	stat, err := AddAccount(newAccount)
 	assert.Nil(t, err)
@@ -45,8 +45,8 @@ func TestAccountService(t *testing.T) {
 		Name:     "test1",
 		Username: "test1",
 		Password: "test1",
-		Admin:    true,
-		Active:   true,
+		Admin:    false,
+		Active:   false,
 	}
 	stat1, err := UpdateAccount(1, updateAccount)
 	assert.Nil(t, err)
@@ -66,7 +66,7 @@ func TestTaskService(t *testing.T) {
 		Description: "test",
 		Created:     time.Now(),
 		CreatedBy:   "test",
-		Active:      true,
+		Active:      false,
 	}
 	stat, err := AddTask(newTask)
 	assert.Nil(t, err)
@@ -88,7 +88,7 @@ func TestTaskService(t *testing.T) {
 		Description: "test1",
 		Created:     time.Now(),
 		CreatedBy:   "test1",
-		Active:      true,
+		Active:      false,
 	}
 	stat1, err := UpdateTask(1, updateTask)
 	assert.Nil(t, err)

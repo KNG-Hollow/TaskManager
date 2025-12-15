@@ -35,6 +35,52 @@ func Connect() (*sql.DB, error) {
 	return db, nil
 }
 
+func AddAccount(account models.Account) (bool, error) {
+	stat := true
+	db, err := Connect()
+	if err != nil {
+		stat = false
+		log.Panicln("Failed To Connect To Database:", err)
+	}
+
+	defer db.Close()
+	fmt.Println("Attempting To [Insert] Account Into Database:", account.Username)
+	insert, err := db.Exec(
+		"INSERT INTO account (id,name,username,password,admin,active) VALUES (?,?,?,?,?,?)",
+		account.ID, account.Name, account.Username, account.Password, boolToBit(account.Admin), boolToBit(account.Active),
+	)
+	if insert == nil || err != nil {
+		stat = false
+		panic(err.Error())
+	}
+
+	fmt.Printf("Successfully [Inserted] [%s] Into Database!\n", account.Username)
+	return stat, nil
+}
+
+func AddTask(task models.Task) (bool, error) {
+	stat := true
+	db, err := Connect()
+	if err != nil {
+		stat = false
+		log.Panicln("Failed To Connect To Database:", err)
+	}
+
+	defer db.Close()
+	fmt.Println("Attempting To [Insert] Task Into Database:", task.Name)
+	insert, err := db.Exec(
+		"INSERT INTO task (id,name,description,created,createdby,active) VALUES (?,?,?,?,?,?)",
+		task.ID, task.Name, task.Description, task.Created, task.CreatedBy, boolToBit(task.Active),
+	)
+	if insert == nil || err != nil {
+		stat = false
+		panic(err.Error())
+	}
+
+	fmt.Printf("Successfully [Inserted] [%s] Into Database!\n", task.Name)
+	return stat, nil
+}
+
 func GetAccounts() ([]models.Account, error) {
 	db, err := Connect()
 	if err != nil {
@@ -239,52 +285,6 @@ func GetTask(id int64) (*models.Task, error) {
 
 	fmt.Println("Successfully [Gathered] Task:", id)
 	return task, nil
-}
-
-func AddAccount(account models.Account) (bool, error) {
-	stat := true
-	db, err := Connect()
-	if err != nil {
-		stat = false
-		log.Panicln("Failed To Connect To Database:", err)
-	}
-
-	defer db.Close()
-	fmt.Println("Attempting To [Insert] Account Into Database:", account.Username)
-	insert, err := db.Exec(
-		"INSERT INTO account (id,name,username,password,admin,active) VALUES (?,?,?,?,?,?)",
-		account.ID, account.Name, account.Username, account.Password, boolToBit(account.Admin), boolToBit(account.Active),
-	)
-	if insert == nil || err != nil {
-		stat = false
-		panic(err.Error())
-	}
-
-	fmt.Printf("Successfully [Inserted] [%s] Into Database!\n", account.Username)
-	return stat, nil
-}
-
-func AddTask(task models.Task) (bool, error) {
-	stat := true
-	db, err := Connect()
-	if err != nil {
-		stat = false
-		log.Panicln("Failed To Connect To Database:", err)
-	}
-
-	defer db.Close()
-	fmt.Println("Attempting To [Insert] Task Into Database:", task.Name)
-	insert, err := db.Exec(
-		"INSERT INTO task (id,name,description,created,createdby,active) VALUES (?,?,?,?,?,?)",
-		task.ID, task.Name, task.Description, task.Created, task.CreatedBy, boolToBit(task.Active),
-	)
-	if insert == nil || err != nil {
-		stat = false
-		panic(err.Error())
-	}
-
-	fmt.Printf("Successfully [Inserted] [%s] Into Database!\n", task.Name)
-	return stat, nil
 }
 
 func UpdateAccount(id int64, newData models.Account) (bool, error) {
