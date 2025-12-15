@@ -10,7 +10,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-func connect() (*sql.DB, error) {
+func Connect() (*sql.DB, error) {
 	fmt.Println("Attempting To Connect To Database...")
 
 	cfg := mysql.NewConfig()
@@ -35,18 +35,17 @@ func connect() (*sql.DB, error) {
 	return db, err
 }
 
-func GetAccounts() []models.Account {
-	db, err := connect()
+func GetAccounts() ([]models.Account, error) {
+	db, err := Connect()
 	if err != nil {
 		log.Panicln("Failed To Connect To Database:", err)
 	}
 
 	defer db.Close()
-	results, err := db.Query("SELECT * FROM accounts")
+	results, err := db.Query("SELECT * FROM account")
 
 	if err != nil {
 		log.Panicln("Failed To Get Accounts From Database:", err.Error())
-		return nil
 	}
 
 	accounts := []models.Account{}
@@ -67,11 +66,11 @@ func GetAccounts() []models.Account {
 		accounts = append(accounts, account)
 	}
 
-	return accounts
+	return accounts, err
 }
 
-func GetAccount(id int) *models.Account {
-	db, err := connect()
+func GetAccount(id int) (*models.Account, error) {
+	db, err := Connect()
 	if err != nil {
 		log.Panicln("Failed To Connect To Database:", err)
 	}
@@ -96,80 +95,124 @@ func GetAccount(id int) *models.Account {
 			panic(err.Error())
 		}
 	} else {
-		return nil
+		return nil, fmt.Errorf("failed to get account with ID: [%d]", id)
 	}
 
-	return account
+	return account, err
 }
 
-func GetTasks() []models.Task {
-	db, err := connect()
+/*
+	func GetTasks() []models.Task {
+		db, err := Connect()
+		if err != nil {
+			log.Panicln("Failed To Connect To Database:", err)
+		}
+
+		defer db.Close()
+	}
+
+	func GetTask(id int64) models.Task {
+		db, err := Connect()
+		if err != nil {
+			log.Panicln("Failed To Connect To Database:", err)
+		}
+
+		defer db.Close()
+	}
+*/
+func AddAccount(account models.Account) (bool, error) {
+	stat := true
+	db, err := Connect()
 	if err != nil {
+		stat = false
 		log.Panicln("Failed To Connect To Database:", err)
 	}
 
 	defer db.Close()
+	insert, err := db.Query(
+		"INSERT INTO account (name,username,password,admin,active) VALUES (?,?,?,?,?)",
+		account.Name, account.Username, account.Password, account.Admin, account.Active,
+	)
+	if err != nil {
+		stat = false
+		panic(err.Error())
+	}
+	defer insert.Close()
+	return stat, err
 }
 
-func GetTask(id int64) models.Task {
-	db, err := connect()
+/*
+	func AddTask(task models.Task) bool {
+		db, err := Connect()
+		if err != nil {
+			log.Panicln("Failed To Connect To Database:", err)
+		}
+
+		defer db.Close()
+	}
+*/
+func UpdateAccount(id int64, newData models.Account) (bool, error) {
+	stat := true
+	db, err := Connect()
 	if err != nil {
+		stat = false
 		log.Panicln("Failed To Connect To Database:", err)
 	}
 
 	defer db.Close()
+	update, err := db.Query(
+		"INSERT INTO account (name,username,password,admin,active) VALUES (?,?,?,?,?) WHERE id=?",
+		newData.Name, newData.Username, newData.Password, newData.Admin, newData.Active, id,
+	)
+	if err != nil {
+		stat = false
+		panic(err.Error())
+	}
+
+	defer update.Close()
+	return stat, err
 }
 
-func AddAccount(account models.Account) bool {
-	db, err := connect()
+/*
+	func UpdateTask(id int64, newData models.Task) bool {
+		db, err := Connect()
+		if err != nil {
+			log.Panicln("Failed To Connect To Database:", err)
+		}
+
+		defer db.Close()
+	}
+*/
+func DeleteAccount(id int64) (bool, error) {
+	stat := true
+	db, err := Connect()
 	if err != nil {
+		stat = false
 		log.Panicln("Failed To Connect To Database:", err)
 	}
 
 	defer db.Close()
-}
-
-func AddTask(task models.Task) bool {
-	db, err := connect()
+	delete, err := db.Query(
+		"DELETE FROM account WHERE id=?",
+		id,
+	)
 	if err != nil {
-		log.Panicln("Failed To Connect To Database:", err)
+		stat = false
+		panic(err.Error())
 	}
 
-	defer db.Close()
+	defer delete.Close()
+	return stat, err
+
 }
 
-func UpdateAccount(id int64, newData models.Account) bool {
-	db, err := connect()
-	if err != nil {
-		log.Panicln("Failed To Connect To Database:", err)
-	}
-
-	defer db.Close()
-}
-
-func UpdateTask(id int64, newData models.Task) bool {
-	db, err := connect()
-	if err != nil {
-		log.Panicln("Failed To Connect To Database:", err)
-	}
-
-	defer db.Close()
-}
-
-func DeleteAccount(id int64, newData models.Account) bool {
-	db, err := connect()
-	if err != nil {
-		log.Panicln("Failed To Connect To Database:", err)
-	}
-
-	defer db.Close()
-}
-
+/*
 func DeleteTask(id int64, newData models.Task) bool {
-	db, err := connect()
+	db, err := Connect()
 	if err != nil {
 		log.Panicln("Failed To Connect To Database:", err)
 	}
 
 	defer db.Close()
 }
+*/

@@ -10,9 +10,12 @@ import (
 )
 
 func GetAccounts(c *gin.Context) {
-	accounts := service.GetAccounts()
+	accounts, err := service.GetAccounts()
+	if err != nil {
+		log.Panicln("Service Failed To Get Accounts:", err)
+	}
 
-	if accounts == nil || len(accounts) == 0 {
+	if len(accounts) == 0 {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, accounts)
@@ -26,7 +29,10 @@ func GetAccount(c *gin.Context) {
 		log.Panicln("Failed To Get Account:", err.Error())
 	}
 
-	account := service.GetAccount(id)
+	account, err := service.GetAccount(id)
+	if err != nil {
+		log.Panicf("Service Failed To Get Account With Id: %d\n%q", id, err)
+	}
 
 	if account == nil {
 		c.AbortWithStatus(http.StatusNotFound)
