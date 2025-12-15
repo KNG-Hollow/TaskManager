@@ -2,23 +2,37 @@ package controllers
 
 import (
 	"log"
+	"net/http"
+	"strconv"
 
 	service "github.com/TaskManager/services"
 	"github.com/gin-gonic/gin"
 )
 
 func GetAccounts(c *gin.Context) {
-	db, err := service.Connect()
-	if err != nil {
-		log.Fatal(err)
+	accounts := service.GetAccounts()
+
+	if accounts == nil || len(accounts) == 0 {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		c.JSON(http.StatusOK, accounts)
 	}
-
-	defer db.Close()
-
 }
 
 func GetAccount(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		log.Panicln("Failed To Get Account:", err.Error())
+	}
 
+	account := service.GetAccount(id)
+
+	if account == nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	} else {
+		c.JSON(http.StatusOK, account)
+	}
 }
 
 func GetTasks(c *gin.Context) {

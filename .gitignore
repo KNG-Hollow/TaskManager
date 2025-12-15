@@ -10,3 +10,6 @@ node_modules/
 *.test
 *.tmp
 *.log
+
+# SQL
+TaskManager.session.sql
