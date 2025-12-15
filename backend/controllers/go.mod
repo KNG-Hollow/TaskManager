@@ -1,14 +1,17 @@
-module github.com/KNG-Hollow/TaskManager
+module github.com/KNG-Hollow/TaskManager/controllers
 
 go 1.25.4
 
+replace github.com/TaskManager/services => ../services
+
 require (
-	github.com/TaskManager/service v0.0.0-00010101000000-000000000000
+	github.com/TaskManager/services v0.0.0-00010101000000-000000000000
 	github.com/gin-gonic/gin v1.11.0
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/TaskManager/models v0.0.0-00010101000000-000000000000 // indirect
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
@@ -43,4 +46,4 @@ require (
 	google.golang.org/protobuf v1.36.9 // indirect
 )
 
-replace github.com/TaskManager/service => ../internal
+replace github.com/TaskManager/models => ../models
