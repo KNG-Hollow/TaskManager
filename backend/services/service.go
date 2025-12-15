@@ -49,6 +49,9 @@ func GetAccounts() ([]models.Account, error) {
 	}
 
 	accounts := []models.Account{}
+	var adminBit []byte
+	var activeBit []byte
+
 	for results.Next() {
 		var account models.Account
 		err = results.Scan(
@@ -56,11 +59,23 @@ func GetAccounts() ([]models.Account, error) {
 			&account.Name,
 			&account.Username,
 			&account.Password,
-			&account.Admin,
-			&account.Active,
+			&adminBit,
+			&activeBit,
 		)
 		if err != nil {
 			panic(err.Error())
+		}
+
+		if len(adminBit) > 0 && adminBit[0] == 1 {
+			account.Admin = true
+		} else {
+			account.Admin = false
+		}
+
+		if len(activeBit) > 0 && activeBit[0] == 1 {
+			account.Active = true
+		} else {
+			account.Active = false
 		}
 
 		accounts = append(accounts, account)
@@ -82,20 +97,35 @@ func GetAccount(id int) (*models.Account, error) {
 	}
 
 	account := &models.Account{}
+	var adminBit []byte
+	var activeBit []byte
+
 	if results.Next() {
 		err = results.Scan(
 			&account.ID,
 			&account.Name,
 			&account.Username,
 			&account.Password,
-			&account.Admin,
-			&account.Active,
+			&adminBit,
+			&activeBit,
 		)
 		if err != nil {
 			panic(err.Error())
 		}
 	} else {
 		return nil, fmt.Errorf("failed to get account with ID: [%d]", id)
+	}
+
+	if len(adminBit) > 0 && adminBit[0] == 1 {
+		account.Admin = true
+	} else {
+		account.Admin = false
+	}
+
+	if len(activeBit) > 0 && activeBit[0] == 1 {
+		account.Active = true
+	} else {
+		account.Active = false
 	}
 
 	return account, err
@@ -129,15 +159,15 @@ func AddAccount(account models.Account) (bool, error) {
 	}
 
 	defer db.Close()
-	insert, err := db.Query(
-		"INSERT INTO account (name,username,password,admin,active) VALUES (?,?,?,?,?)",
-		account.Name, account.Username, account.Password, account.Admin, account.Active,
+	insert, err := db.Exec(
+		"INSERT INTO account (id,name,username,password,admin,active) VALUES (?,?,?,?,?,?)",
+		account.ID, account.Name, account.Username, account.Password, boolToBit(account.Admin), boolToBit(account.Active),
 	)
-	if err != nil {
+	if insert == nil || err != nil {
 		stat = false
 		panic(err.Error())
 	}
-	defer insert.Close()
+
 	return stat, err
 }
 
@@ -160,16 +190,16 @@ func UpdateAccount(id int64, newData models.Account) (bool, error) {
 	}
 
 	defer db.Close()
-	update, err := db.Query(
-		"INSERT INTO account (name,username,password,admin,active) VALUES (?,?,?,?,?) WHERE id=?",
+	update, err := db.Exec(
+		//"INSERT INTO account (name,username,password,admin,active) VALUES (?,?,?,?,?) WHERE id=?",
+		"UPDATE account SET name=?, username=?, password=?, admin=?, active=? WHERE id=?",
 		newData.Name, newData.Username, newData.Password, newData.Admin, newData.Active, id,
 	)
-	if err != nil {
+	if update == nil || err != nil {
 		stat = false
 		panic(err.Error())
 	}
 
-	defer update.Close()
 	return stat, err
 }
 
@@ -192,16 +222,15 @@ func DeleteAccount(id int64) (bool, error) {
 	}
 
 	defer db.Close()
-	delete, err := db.Query(
+	delete, err := db.Exec(
 		"DELETE FROM account WHERE id=?",
 		id,
 	)
-	if err != nil {
+	if delete == nil || err != nil {
 		stat = false
 		panic(err.Error())
 	}
 
-	defer delete.Close()
 	return stat, err
 
 }
@@ -216,3 +245,10 @@ func DeleteTask(id int64, newData models.Task) bool {
 	defer db.Close()
 }
 */
+
+func boolToBit(b bool) []byte {
+	if b {
+		return []byte{1}
+	}
+	return []byte{0}
+}

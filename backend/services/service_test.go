@@ -17,6 +17,7 @@ func TestConnection(t *testing.T) {
 func TestAccountService(t *testing.T) {
 	// AddAccount
 	newAccount := models.Account{
+		ID:       1,
 		Name:     "test",
 		Username: "test",
 		Password: "test",
