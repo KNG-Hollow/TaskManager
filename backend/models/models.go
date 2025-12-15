@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type Account struct {
 	ID       int64  `json:"id"`
 	Name     string `json:"name"`
@@ -10,10 +12,10 @@ type Account struct {
 }
 
 type Task struct {
-	ID          int64  `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Created     string `json:"created"`
-	CreatedBy   string `json:"username"`
-	Active      bool   `json:"active"`
+	ID          int64     `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Created     time.Time `json:"created"`
+	CreatedBy   string    `json:"username"`
+	Active      bool      `json:"active"`
 }

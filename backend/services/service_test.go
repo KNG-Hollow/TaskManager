@@ -2,6 +2,8 @@ package services
 
 import (
 	"testing"
+	"time"
+
 	//"regexp"
 
 	"github.com/TaskManager/models"
@@ -36,7 +38,7 @@ func TestAccountService(t *testing.T) {
 	// GetAccount
 	account, err := GetAccount(1)
 	assert.Nil(t, err)
-	assert.True(t, account != nil, "Account Exists!")
+	assert.NotNil(t, account, "Account Exists!")
 
 	// UpdateAccount
 	updateAccount := models.Account{
@@ -52,6 +54,48 @@ func TestAccountService(t *testing.T) {
 
 	// DeleteAccount
 	stat2, err := DeleteAccount(1)
+	assert.Nil(t, err)
+	assert.True(t, stat2)
+}
+
+func TestTaskService(t *testing.T) {
+	// AddTask
+	newTask := models.Task{
+		ID:          1,
+		Name:        "test",
+		Description: "test",
+		Created:     time.Now(),
+		CreatedBy:   "test",
+		Active:      true,
+	}
+	stat, err := AddTask(newTask)
+	assert.Nil(t, err)
+	assert.True(t, stat)
+
+	// GetTasks
+	tasks, err := GetTasks()
+	assert.Nil(t, err)
+	assert.True(t, len(tasks) > 0, "Tasks Greater Than Zero!")
+
+	// GetTask
+	task, err := GetTask(1)
+	assert.Nil(t, err)
+	assert.NotNil(t, task, "Task Exists!")
+
+	// UpdateTask
+	updateTask := models.Task{
+		Name:        "test1",
+		Description: "test1",
+		Created:     time.Now(),
+		CreatedBy:   "test1",
+		Active:      true,
+	}
+	stat1, err := UpdateTask(1, updateTask)
+	assert.Nil(t, err)
+	assert.True(t, stat1)
+
+	// DeleteTask
+	stat2, err := DeleteTask(1)
 	assert.Nil(t, err)
 	assert.True(t, stat2)
 }
