@@ -2,16 +2,17 @@ FROM golang:alpine AS builder
 
 WORKDIR /app
 
-COPY . .
-
+# This Block Does Not Build But Is Recommended
 #COPY ./go.mod ./go.sum ./
-RUN go mod download
-
+#RUN go mod download
 #COPY . .
+
+COPY . .
+RUN go mod download
 
 EXPOSE 8081
 EXPOSE 3306
-#EXPOSE 5173
+EXPOSE 5173
 
 ENV DBUSER=kng
 ENV DBPASS=Recon777
@@ -30,7 +31,7 @@ COPY --from=builder /app/server .
 
 EXPOSE 8081
 EXPOSE 3306
-#EXPOSE 5173
+EXPOSE 5173
 
 ENV DBUSER=kng
 ENV DBPASS=Recon777

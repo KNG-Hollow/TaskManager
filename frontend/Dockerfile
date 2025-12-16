@@ -7,12 +7,12 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN npx vite build
 
 
 # If Running Development Server
 EXPOSE 5173
-#EXPOSE 8081
+EXPOSE 8081
 CMD ["npm", "run", "dev"]
 
 
