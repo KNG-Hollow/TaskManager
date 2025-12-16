@@ -15,10 +15,14 @@ func Connect() (*sql.DB, error) {
 	fmt.Println("Attempting To [Connect] To Database...")
 
 	cfg := mysql.NewConfig()
+	cfg.Net = "tcp"
 	cfg.User = os.Getenv("DBUSER")
 	cfg.Passwd = os.Getenv("DBPASS")
-	cfg.Net = "tcp"
-	cfg.Addr = "127.0.0.1:3306"
+
+	host := os.Getenv("DBHOST")
+	port := os.Getenv("DBPORT")
+	cfg.Addr = fmt.Sprintf("%s:%s", host, port)
+
 	cfg.DBName = "taskmanager"
 
 	db, err := sql.Open("mysql", cfg.FormatDSN())

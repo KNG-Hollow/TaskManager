@@ -1,0 +1,35 @@
+services:
+  server:
+    container_name: tm-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - web-network
+    environment:
+      DBUSER: kng
+      DBPASS: Recon777
+      DBHOST: 192.168.0.77
+      DBPORT: 3306
+      DBNAME: taskmanager
+
+  web:
+    container_name: tm-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    networks:
+      - web-network
+    volumes:
+      - ./frontend:/app  # Mount the local frontend directory
+      - /app/node_modules  # Prevent overwriting node_modules in the container
+
+networks:
+  web-network:
+    driver: bridge
