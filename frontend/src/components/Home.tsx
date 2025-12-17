@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { type Account, type Task } from "./utility/Interfaces";
 
 export default function Home() {
-    const [isActive, setActive] = useState<boolean | null>();
-    const [isAdmin, setAllowed] = useState<boolean | null>(null);
+    const [isActive, setActive] = useState<boolean>(false);
+    const [isAdmin, setAllowed] = useState<boolean>(false);
     const navigate = useNavigate();
     
     useEffect(() => {

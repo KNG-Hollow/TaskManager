@@ -25,6 +25,18 @@ func AddAccount(c *gin.Context) {
 	}
 }
 
+func ValidateLogin(c *gin.Context) {
+	usernameParam := c.Query("username")
+	passwordParam := c.Query("password")
+
+	res, err := service.ValidateLogin(usernameParam, passwordParam)
+	if res == nil || err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		log.Panicln("Service Failed To Authenticate The Account:", err.Error())
+	}
+	c.JSON(http.StatusOK, res)
+}
+
 func AddTask(c *gin.Context) {
 	var task models.Task
 

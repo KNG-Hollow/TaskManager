@@ -19,5 +19,7 @@ func InitRouter() *gin.Engine {
 	router.DELETE("/api/accounts/:id", ctrl.DeleteAccount)
 	router.DELETE("/api/tasks/:id", ctrl.DeleteTask)
 
+	router.GET("/api/auth", ctrl.ValidateLogin)
+
 	return router
 }

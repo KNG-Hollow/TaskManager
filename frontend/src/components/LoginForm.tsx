@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse, HttpStatusCode } from "axios";
 import type { Account } from "./utility/Interfaces";
 import { UseAccount } from "../context/Context";
 
 export default function Login() {
-    const [isActive, setActive] = useState<boolean>(false);
+    const [, setActive] = useState<boolean>(false);
     const [usernameIn, setUsernameValue] = useState<string>('');
     const [passwordIn, setPasswordValue] = useState<string>('');
     const navigate = useNavigate();
@@ -49,15 +49,14 @@ export default function Login() {
                     </div>
                     <div id="login-buttons">
                         <div id="login-button">
-                            <button onClick={() => {
+                            <button onClick={async () => {
                                 console.log("Attempting To Login as: ", usernameIn);
-                                const [exists, accountInfo] = authorizeUser(usernameIn, passwordIn);
+                                const [exists, accountInfo] = await authorizeUser(usernameIn, passwordIn);
                                 if (!exists) {
                                     setActive(false);
                                     return;
                                 } else {
                                     setActive(true);
-                                    accountInfo.active = isActive;
                                     const { setAccount } = UseAccount();
                                     setAccount(accountInfo);
                                     navigate("/")
@@ -73,6 +72,27 @@ export default function Login() {
     );
 }
 
-function authorizeUser(username: string, password: string): [boolean | null, Account] {
-    
+async function authorizeUser(username: string, password: string): Promise<[boolean, Account]> {
+    let exists: boolean = false;
+    let account: Account = {} as Account;
+
+    try {
+        const response = await axios.get<Account>("http://localhost:8081/api/auth", {
+            params: {
+                username,
+                password,
+            },
+            withCredentials: true,
+        });
+        if (response.status !== HttpStatusCode.Ok) {
+            exists = false;
+            throw new Error("Response Status: Unsuccessful")
+        }
+        exists = true;
+        account = response.data;
+        return [exists, account];
+    } catch (err) {
+        console.error(err);
+        throw new Error("Failed To Query RESTapi: " + err);
+    }
 }

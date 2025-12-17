@@ -390,3 +390,52 @@ func boolToBit(b bool) []byte {
 	}
 	return []byte{0}
 }
+
+func ValidateLogin(username string, password string) (*models.Account, error) {
+	db, err := Connect()
+	if err != nil {
+		log.Panicln("Failed To Connect To Database:", err)
+	}
+
+	defer db.Close()
+	fmt.Println("Attempting To [Authorize] Account:", username)
+	results, err := db.Query("SELECT * FROM account WHERE username=? AND password=?", username, password)
+	if err != nil {
+		log.Panicln("Failed To Authenticate Account:", err.Error())
+	}
+
+	account := &models.Account{}
+	var adminBit []byte
+	var activeBit []byte
+
+	if results.Next() {
+		err = results.Scan(
+			&account.ID,
+			&account.Name,
+			&account.Username,
+			&account.Password,
+			&adminBit,
+			&activeBit,
+		)
+		if err != nil {
+			panic(err.Error())
+		}
+	} else {
+		return nil, fmt.Errorf("failed to authenticate account with username: [%s]", username)
+	}
+
+	if len(adminBit) > 0 && adminBit[0] == 1 {
+		account.Admin = true
+	} else {
+		account.Admin = false
+	}
+
+	if len(activeBit) > 0 && activeBit[0] == 1 {
+		account.Active = true
+	} else {
+		account.Active = false
+	}
+
+	fmt.Println("Successfully [Authenticated] Account:", username)
+	return account, nil
+}
