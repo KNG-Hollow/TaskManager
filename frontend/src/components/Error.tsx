@@ -1,6 +1,6 @@
-import { useState } from "react";
+//import { useState } from "react";
 
-export default function Tasks() {
+export default function Error() {
     //const [isAdmin, setAllowed] = useState<boolean | null>(null)
 
     return (
