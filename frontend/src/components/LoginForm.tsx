@@ -1,11 +1,12 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosRequestConfig, AxiosResponse, HttpStatusCode } from "axios";
-import type { Account } from "./utility/Interfaces";
-import { UseAccount } from "../context/Context";
+import type { Account, AppState } from "./utility/Interfaces";
+import { UseAccount, UseAppState } from "../context/Context";
 
 export default function Login() {
-    const [, setActive] = useState<boolean>(false);
+    const [isActive, setActive] = useState<boolean>(false);
+    const [isAdmin, setAdmin] = useState<boolean>(false);
     const [usernameIn, setUsernameValue] = useState<string>('');
     const [passwordIn, setPasswordValue] = useState<string>('');
     const navigate = useNavigate();
@@ -52,13 +53,30 @@ export default function Login() {
                             <button onClick={async () => {
                                 console.log("Attempting To Login as: ", usernameIn);
                                 const [exists, accountInfo] = await authorizeUser(usernameIn, passwordIn);
+                                const { setAppState } = UseAppState();
+                                const appState: AppState = { active: false, admin: false };
+
                                 if (!exists) {
                                     setActive(false);
+                                    setAdmin(false);
+                                    appState.active = isActive;
+                                    appState.admin = isAdmin
+
+                                    setAppState(appState)
                                     return;
                                 } else {
                                     setActive(true);
+                                    setAdmin(false);
+                                    appState.active = isActive;
+                                    appState.admin = isAdmin;
+
+                                    if (accountInfo.admin === true) {
+                                        setAdmin(true)
+                                        appState.admin = isAdmin;
+                                    }
                                     const { setAccount } = UseAccount();
                                     setAccount(accountInfo);
+                                    setAppState(appState)
                                     navigate("/")
                                 }
                             }}>

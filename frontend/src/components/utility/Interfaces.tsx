@@ -15,3 +15,8 @@ export interface Task {
     createdBy: string;
     active: boolean;
 }
+
+export interface AppState {
+    active: boolean;
+    admin: boolean;
+}

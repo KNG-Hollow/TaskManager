@@ -1,7 +1,9 @@
-//import { useState } from "react";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function Error() {
-    //const [isAdmin, setAllowed] = useState<boolean | null>(null)
+    const location = useLocation();
+    const data = location.state;
 
     return (
         <div className="component-container">
@@ -17,7 +19,7 @@ export default function Error() {
                         
                     </div>
                     <div id="error-message">
-
+                        <p>Error: {data?.message}</p>
                     </div>
                 </div>
             </div>

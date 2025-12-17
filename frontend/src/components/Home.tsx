@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { type Account, type Task } from "./utility/Interfaces";
+import { type Task } from "./utility/Interfaces";
+import { UseAccount, UseAppState } from "../context/Context";
 
 export default function Home() {
-    const [isActive, setActive] = useState<boolean>(false);
-    const [isAdmin, setAllowed] = useState<boolean>(false);
+    const { account } = UseAccount();
+    const { appState } = UseAppState();
     const navigate = useNavigate();
     
     useEffect(() => {
-        if (!isActive) {
+        if (!appState!.active) {
             return () => {
-                navigate("/login")
+                navigate("/login");
             }
         }
-    }, [navigate, isActive]);
+    }, [navigate, appState]);
 
     return (
         <div className="component-container">

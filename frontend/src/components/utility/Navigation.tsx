@@ -1,13 +1,23 @@
 import { Link } from "react-router-dom";
+import { UseAppState } from "../../context/Context";
 
 export default function Navigation() {
+  const { appState } = UseAppState();
+  let isVisible: boolean;
+
+  if (appState === null) {
+    isVisible = false
+  } else {
+    isVisible = true
+  }
+
   return (
     <nav>
       <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/login">Login</Link></li>
-        <li><Link to="/accounts">Accounts</Link></li>
-        <li><Link to="/tasks">Tasks</Link></li>
+        <li>{ isVisible ? <Link id="link-home" to="/">Home</Link> : null}</li>
+        <li><Link id="link-login" to="/login">Login</Link></li>
+        <li>{ isVisible && appState!.admin ? <Link id="link-accounts" to="/accounts">Accounts</Link> : null }</li>
+        <li>{ isVisible ? <Link id="link-tasks" to="/tasks">Tasks</Link> : null }</li>
       </ul>
     </nav>
   );
