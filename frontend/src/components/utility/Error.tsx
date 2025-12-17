@@ -13,7 +13,9 @@ export default function Error() {
       <div className="component-view">
         <div id="error-container">
           <div id="error-header"></div>
-          <div id="error-info"></div>
+          <div id="error-info">
+            <h3>{data?.title}</h3>
+          </div>
           <div id="error-message">
             <p>Error: {data?.message}</p>
           </div>

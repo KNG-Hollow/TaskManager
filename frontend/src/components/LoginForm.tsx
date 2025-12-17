@@ -1,19 +1,47 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
-  HttpStatusCode,
-} from 'axios';
-import type { Account, AppState } from './utility/Interfaces';
+import type { AppState } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
+import { AuthorizeUser } from './utility/ApiServices';
 
 export default function Login() {
-  const [isActive, setActive] = useState<boolean>(false);
-  const [isAdmin, setAdmin] = useState<boolean>(false);
+  const [, setActive] = useState<boolean>(false);
+  const [, setAdmin] = useState<boolean>(false);
   const [usernameIn, setUsernameValue] = useState<string>('');
   const [passwordIn, setPasswordValue] = useState<string>('');
+  const { setAppState } = UseAppState();
+  const { setAccount } = UseAccount();
   const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    console.log('Attempting To Login as: ', usernameIn);
+    const [exists, accountInfo] = await AuthorizeUser(usernameIn, passwordIn);
+    const appState: AppState = { active: false, admin: false };
+
+    if (!exists) {
+      setActive(false);
+      setAdmin(false);
+      appState.active = false;
+      appState.admin = false;
+    } else {
+      setActive(true);
+      setAdmin(accountInfo.admin);
+      appState.active = true;
+      appState.admin = accountInfo.admin;
+    }
+
+    console.log(
+      "'appState' variable returned as: ",
+      appState.active,
+      appState.admin
+    );
+    setAppState(appState);
+    setAccount(accountInfo);
+
+    if (exists) {
+      navigate('/');
+    }
+  };
 
   return (
     <div className="component-container">
@@ -38,7 +66,7 @@ export default function Login() {
             <div id="input-password">
               <label htmlFor="password-area">Password:</label>
               <input
-                type="text"
+                type="password"
                 aria-label="password"
                 placeholder="password"
                 value={passwordIn}
@@ -48,78 +76,11 @@ export default function Login() {
           </div>
           <div id="login-buttons">
             <div id="login-button">
-              <button
-                onClick={async () => {
-                  console.log('Attempting To Login as: ', usernameIn);
-                  const [exists, accountInfo] = await authorizeUser(
-                    usernameIn,
-                    passwordIn
-                  );
-                  const { setAppState } = UseAppState();
-                  const appState: AppState = { active: false, admin: false };
-
-                  if (!exists) {
-                    setActive(false);
-                    setAdmin(false);
-                    appState.active = isActive;
-                    appState.admin = isAdmin;
-
-                    setAppState(appState);
-                    return;
-                  } else {
-                    setActive(true);
-                    setAdmin(false);
-                    appState.active = isActive;
-                    appState.admin = isAdmin;
-
-                    if (accountInfo.admin === true) {
-                      setAdmin(true);
-                      appState.admin = isAdmin;
-                    }
-                    const { setAccount } = UseAccount();
-                    setAccount(accountInfo);
-                    setAppState(appState);
-                    navigate('/');
-                  }
-                }}
-              >
-                Login
-              </button>
+              <button onClick={handleLogin}>Login</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
-
-async function authorizeUser(
-  username: string,
-  password: string
-): Promise<[boolean, Account]> {
-  let exists: boolean = false;
-  let account: Account = {} as Account;
-
-  try {
-    const response = await axios.get<Account>(
-      'http://localhost:8081/api/auth',
-      {
-        params: {
-          username,
-          password,
-        },
-        withCredentials: true,
-      }
-    );
-    if (response.status !== HttpStatusCode.Ok) {
-      exists = false;
-      throw new Error('Response Status: Unsuccessful');
-    }
-    exists = true;
-    account = response.data;
-    return [exists, account];
-  } catch (err) {
-    console.error(err);
-    throw new Error('Failed To Query RESTapi: ' + err);
-  }
 }

@@ -26,10 +26,17 @@ func AddAccount(c *gin.Context) {
 }
 
 func ValidateLogin(c *gin.Context) {
-	usernameParam := c.Query("username")
-	passwordParam := c.Query("password")
+	var loginDetails struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
 
-	res, err := service.ValidateLogin(usernameParam, passwordParam)
+	if err := c.ShouldBindJSON(&loginDetails); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	res, err := service.ValidateLogin(loginDetails.Username, loginDetails.Password)
 	if res == nil || err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		log.Panicln("Service Failed To Authenticate The Account:", err.Error())

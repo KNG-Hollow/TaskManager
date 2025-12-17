@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
+import Login from '../components/LoginForm';
 
 export default function Home() {
   const { account } = UseAccount();
@@ -9,10 +10,8 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!appState!.active) {
-      return () => {
-        navigate('/login');
-      };
+    if (!appState?.active) {
+      navigate('/login');
     }
   }, [navigate, appState]);
 
