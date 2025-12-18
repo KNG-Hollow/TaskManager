@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taskmanager-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taskmanager-frontend
+  template:
+    metadata:
+      labels:
+        app: taskmanager-frontend
+    spec:
+      containers:
+      - name: taskmanager-frontend
+        #image: localhost:5000/taskmanager-frontend:dev
+        image: 192.168.49.2:30165/taskmanager-frontend:dev
+        ports:
+        - containerPort: 5173
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
