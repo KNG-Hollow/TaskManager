@@ -8,13 +8,11 @@
 
         + Database System MUST Be MariaDB Or MySQL As These Are Compatible With The Drivers
             {Go} Will Be Using
-        + MUST Be Set For Your Host's Current Login Session, Pointing To The 
-            [ user, password, host, port ] *respectively*, That You Plan On Connecting To
-        + The Variables must point to active MySQL/MariaDB server credentials
+        + The Variables must point to active MySQL/MariaDB server credentials to connect
         + Database must support TCP
 
         - A SQL Script Is Provided At "<root>/database/create-tables.sql"
-            To Populate A MariaDB/MySQL Database's Tables
+            To Help Populate A New MariaDB/MySQL Database's Tables
 
             *REMINDER* The Database Must Be Called "taskmanager" For The Backend API To Connect
 

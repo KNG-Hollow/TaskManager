@@ -1,10 +1,9 @@
 # Database Config
 
-    - The Environment Variables [DBUSER, DBPASS] Must Be Set For Your Current Shell Session
+    - The Environment Variables [DBUSER, DBPASS, DBHOST, DBPORT] Must Be Set For Your Current Login Session
         + They must point to active MySQL/MariaDB server credentials
         + The Database must be named "taskmanager"
         + Database must support TCP
-        + Database address must be located at "127.0.0.1:3306" 
 
 # Data Structures
 
