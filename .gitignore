@@ -18,3 +18,5 @@ node_modules/
 
 # SQL
 TaskManager.session.sql
+
+.*
