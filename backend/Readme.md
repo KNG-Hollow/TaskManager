@@ -1,11 +1,13 @@
-# Database Config
+# Backend ( Go/gin )
+
+## Database Config
 
     - The Environment Variables [DBUSER, DBPASS, DBHOST, DBPORT] Must Be Set For Your Current Login Session
         + They must point to active MySQL/MariaDB server credentials
         + The Database must be named "taskmanager"
         + Database must support TCP
 
-# Data Structures
+## Data Structures
 
     - Account {
         id       int64  `json:"id"`
@@ -25,7 +27,7 @@
         active      bool      `json:"active"`
     }
     
-# API EndPoints
+## API EndPoints
 
     POST("/api/accounts")
     POST("/api/tasks")

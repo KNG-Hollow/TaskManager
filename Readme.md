@@ -1,7 +1,12 @@
-# How To Use
+# TaskManager
+
+    - An Easy To Use Web Application Built With Docker-Compose 
+
+## How To Use
 
     - You must have Docker Compose installed to be able to build 
         and run the application with the "<root>/compose.yaml file"
+
 
     - Create The Environment Variables [ DBUSER, DBPASS, DBHOST, DBPORT ] And
         Place Into A "<root>/.env" File As A key=value List
@@ -16,11 +21,14 @@
 
             *REMINDER* The Database Must Be Called "taskmanager" For The Backend API To Connect
 
+
     - The compiled-asset files are in:
 
         + Backend: <root>/backend/TM-Server (Executable)
         + Frontend: <root>/frontend/dist/   (build files)
 
+
     - RUN { docker compose up --build } to build the containers needed and run the Compose service
+
 
     - Once the Compose service is running, insert the host's address into a browser's address bar to navigate to the website 
