@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
-import Login from '../components/LoginForm';
 
 export default function Home() {
   const { account } = UseAccount();

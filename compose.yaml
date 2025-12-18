@@ -27,9 +27,17 @@ services:
     networks:
       - web-network
     volumes:
-      - ./frontend:/app  # Mount the local frontend directory for hot-reload
-      - /app/node_modules  # Prevent overwriting node_modules in the container
-    #command: ["npm", "run", "dev"]
+      - ./frontend:/app # Mount the local frontend directory for hot-reload
+      - /app/node_modules # Prevent overwriting node_modules in the container
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
 
   nginx:
     #image: nginx:latest
