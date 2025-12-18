@@ -44,11 +44,11 @@ export default function Login() {
   };
 
   return (
-    <div className="component-container">
+    <div className="flex h-full w-full flex-col self-center px-4">
       <div className="header">
         <h2>Login</h2>
       </div>
-      <div className="component-view">
+      <div className="">
         <div id="login-container">
           <div id="login-header"></div>
           <div id="login-info"></div>

@@ -1,9 +1,11 @@
 @import 'tailwindcss';
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100vh;
+  width: 100vh;
   text-align: center;
 }
 
@@ -13,10 +15,10 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
 .read-the-docs {
   color: #888;
+}
+
+.component-header {
+  @apply mx-auto flex max-w-sm flex-row;
 }

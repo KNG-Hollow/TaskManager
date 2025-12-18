@@ -10,7 +10,7 @@ export default function Footer() {
   };
 
   return (
-    <div id="footer">
+    <div id="footer" className="w-full justify-center bg-blue-600 px-2 py-1">
       <div id="footer-text">{footer()}</div>
     </div>
   );

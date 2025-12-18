@@ -15,7 +15,7 @@ export default function Home() {
   }, [navigate, appState]);
 
   return (
-    <div className="component-container">
+    <div className="flex h-full w-full flex-1 flex-col self-center px-4">
       <div className="header">
         <h2>Welcome Home</h2>
       </div>
