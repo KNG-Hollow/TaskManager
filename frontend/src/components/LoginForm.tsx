@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { AppState } from './utility/Interfaces';
+import { type AppState } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
 import { AuthorizeUser } from './utility/ApiServices';
 
