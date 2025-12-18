@@ -2,11 +2,6 @@ FROM golang:alpine AS builder
 
 WORKDIR /app
 
-# This Block Does Not Build But Is Recommended
-#COPY ./go.mod ./go.sum ./
-#RUN go mod download
-#COPY . .
-
 COPY . .
 RUN go mod download
 

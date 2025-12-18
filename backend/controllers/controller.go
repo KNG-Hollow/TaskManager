@@ -25,25 +25,6 @@ func AddAccount(c *gin.Context) {
 	}
 }
 
-func ValidateLogin(c *gin.Context) {
-	var loginDetails struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
-
-	if err := c.ShouldBindJSON(&loginDetails); err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	res, err := service.ValidateLogin(loginDetails.Username, loginDetails.Password)
-	if res == nil || err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		log.Panicln("Service Failed To Authenticate The Account:", err.Error())
-	}
-	c.JSON(http.StatusOK, res)
-}
-
 func AddTask(c *gin.Context) {
 	var task models.Task
 
@@ -201,4 +182,23 @@ func DeleteTask(c *gin.Context) {
 		log.Panicln("Service Failed To Delete Task With Id:", id)
 	}
 	c.JSON(http.StatusAccepted, id)
+}
+
+func ValidateLogin(c *gin.Context) {
+	var loginDetails struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+
+	if err := c.ShouldBindJSON(&loginDetails); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	res, err := service.ValidateLogin(loginDetails.Username, loginDetails.Password)
+	if res == nil || err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		log.Panicln("Service Failed To Authenticate The Account:", err.Error())
+	}
+	c.JSON(http.StatusOK, res)
 }

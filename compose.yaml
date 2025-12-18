@@ -9,11 +9,11 @@ services:
     networks:
       - web-network
     environment:
-      DBUSER: kng
-      DBPASS: Recon777
-      DBHOST: 192.168.0.77
-      DBPORT: 3306
-      DBNAME: taskmanager
+      DBUSER: ${DBUSER}
+      DBPASS: ${DBPASS}
+      DBHOST: ${DBHOST}
+      DBPORT: ${DBPORT}
+      DBNAME: ${DBNAME}
 
   web:
     container_name: tm-frontend
@@ -40,7 +40,6 @@ services:
           path: package.json
 
   nginx:
-    #image: nginx:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
