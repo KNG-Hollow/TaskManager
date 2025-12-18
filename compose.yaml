@@ -1,6 +1,6 @@
 services:
   server:
-    container_name: tm-backend
+    container_name: taskmanager-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -16,7 +16,7 @@ services:
       DBNAME: ${DBNAME}
 
   web:
-    container_name: tm-frontend
+    container_name: taskmanager-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile

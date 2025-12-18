@@ -9,11 +9,11 @@ COPY . .
 
 RUN npx vite build
 
-# TODO If Running Development Server
+# TODO If Running Development Server            (Development)
 CMD ["npm", "run", "dev"]
 
 
-# TODO If Serving Built Assets With Nginx
+# TODO If Serving Built Assets With Nginx       (Release)
 
 # Use Minimal Base Image
 #FROM nginx:alpine
