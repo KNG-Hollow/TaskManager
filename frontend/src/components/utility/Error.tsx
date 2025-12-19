@@ -6,18 +6,18 @@ export default function Error() {
   const data = location.state;
 
   return (
-    <div className="component-container">
-      <div className="header">
-        <h2>Error</h2>
+    <div className="mx-auto flex h-full w-full flex-col">
+      <div className="mx-auto my-auto h-full w-full text-2xl font-bold text-red-600">
+        <h1>Error</h1>
       </div>
-      <div className="component-view">
-        <div id="error-container">
+      <div className="mx-auto my-auto h-full w-full text-xl text-red-500">
+        <div id="error-container" className="flex flex-col gap-y-32">
           <div id="error-header"></div>
           <div id="error-info">
-            <h3>{data?.title}</h3>
+            <h3>Error Title: {data?.title}</h3>
           </div>
           <div id="error-message">
-            <p>Error: {data?.message}</p>
+            <p>Error Message: {data?.message}</p>
           </div>
         </div>
       </div>

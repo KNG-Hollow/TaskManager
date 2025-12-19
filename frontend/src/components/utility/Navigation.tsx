@@ -18,26 +18,28 @@ export default function Navigation() {
         <ul className="mx-auto flex flex-row justify-center gap-16 self-center">
           <li>
             {isVisible ? (
-              <Link id="link-home" to="/home">
+              <Link id="link-login" to="/login" className="text-white">
+                Login
+              </Link>
+            ) : null}
+          </li>
+          <li>
+            {isVisible ? (
+              <Link id="link-home" to="/home" className="text-white">
                 Home
               </Link>
             ) : null}
           </li>
           <li>
-            <Link id="link-login" to="/login">
-              Login
-            </Link>
-          </li>
-          <li>
             {isVisible && appState!.admin ? (
-              <Link id="link-accounts" to="/accounts">
+              <Link id="link-accounts" to="/accounts" className="text-white">
                 Accounts
               </Link>
             ) : null}
           </li>
           <li>
             {isVisible ? (
-              <Link id="link-tasks" to="/tasks">
+              <Link id="link-tasks" to="/tasks" className="text-white">
                 Tasks
               </Link>
             ) : null}
