@@ -25,13 +25,6 @@ export default function Navigation() {
           </li>
           <li>
             {isVisible ? (
-              <Link id="link-logout" to="/logout" className="text-red-500">
-                Logout
-              </Link>
-            ) : null}
-          </li>
-          <li>
-            {isVisible ? (
               <Link id="link-home" to="/home" className="text-white">
                 Home
               </Link>
@@ -48,6 +41,28 @@ export default function Navigation() {
             {isVisible ? (
               <Link id="link-tasks" to="/tasks" className="text-white">
                 Tasks
+              </Link>
+            ) : null}
+          </li>
+          <li>
+            {isVisible ? (
+              <Link
+                id="link-logout"
+                to="/logout"
+                className="font-extrabold text-red-600"
+              >
+                Logout
+              </Link>
+            ) : null}
+          </li>
+          <li>
+            {isVisible && appState!.admin ? (
+              <Link
+                id="link-error"
+                to="/error"
+                className="font-extrabold text-red-600"
+              >
+                Error Page
               </Link>
             ) : null}
           </li>

@@ -28,7 +28,12 @@ export default function Error() {
       </div>
       <div className="mx-auto flex h-4/5 w-full flex-col justify-center text-xl">
         <div id="error-container" className="flex w-full flex-col text-red-500">
-          <div id="error-header"></div>
+          <div id="error-header">
+            <h4>
+              You Have Run Into An Error On The Website! Please Let The
+              Administrator Know Of The Situation.
+            </h4>
+          </div>
           <div id="error-info" className="mt-5">
             <h3>Error Title: </h3>
             <h3>{errorState?.title}</h3>
@@ -43,10 +48,11 @@ export default function Error() {
             onClick={() => {
               setErrorState(blankError);
               console.log("Error State When Leaving '/error': ", blankError);
-              navigate('/home');
+              navigate('/login');
+              history.go(0);
             }}
           >
-            Go Home
+            Login Page
           </button>
         </div>
       </div>

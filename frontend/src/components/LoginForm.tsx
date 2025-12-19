@@ -28,6 +28,7 @@ export default function Login() {
       setAdmin(false);
       appState.active = false;
       appState.admin = false;
+      alert('Account Was Not Found In The Database!');
     } else {
       setActive(true);
       setAdmin(accountInfo.admin);

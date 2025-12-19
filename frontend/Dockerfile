@@ -7,14 +7,18 @@ RUN npm install
 
 COPY . .
 
-RUN npx vite build
+#  __________________________________________________________
 
 # TODO If Running Development Server            (Development)
+
 CMD ["npm", "run", "dev"]
 
+#  ___________________________________________________________
 
 # TODO If Serving Built Assets With Nginx       (Release)
 
+# Compile With Vite
+#RUN npx vite build
 # Use Minimal Base Image
 #FROM nginx:alpine
 # Delete any existing default configurations that may cause conflicts
@@ -23,3 +27,5 @@ CMD ["npm", "run", "dev"]
 #COPY nginx.conf /etc/nginx/nginx.conf
 # Adjust according to your build output folder
 #COPY --from=frontend-builder /app/dist /etc/nginx/html  
+
+#  ______________________________________________________________
