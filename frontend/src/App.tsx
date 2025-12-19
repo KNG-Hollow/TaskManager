@@ -11,6 +11,8 @@ import Accounts from './components/accounts/Accounts';
 import Task from './components/tasks/ViewTask';
 import Tasks from './components/tasks/Tasks';
 import Logout from './components/utility/Logout';
+import CreateAccount from './components/accounts/CreateAccount';
+import CreateTask from './components/tasks/CreateTask';
 
 export default function App() {
   const { appState } = UseAppState();
@@ -23,8 +25,10 @@ export default function App() {
         <Route path="/home" Component={Home} />
         <Route path="/login" Component={Login} />
         <Route path="/logout" Component={Logout} />
+        <Route path="/create-account" Component={CreateAccount} />
         <Route path="/accounts/:id" Component={Account} />
         <Route path="/accounts" Component={Accounts} />
+        <Route path="/create-task" Component={CreateTask} />
         <Route path="/tasks/:id" Component={Task} />
         <Route path="/tasks" Component={Tasks} />
         <Route path="/error" Component={Error} />
