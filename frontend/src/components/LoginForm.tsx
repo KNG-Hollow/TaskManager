@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { type AppState } from './utility/Interfaces';
+import type { AppState, Account } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
 import { AuthorizeUser } from './utility/ApiServices';
 
@@ -13,14 +13,24 @@ export default function Login() {
   const { setAccount } = UseAccount();
   const navigate = useNavigate();
 
+  let exists: boolean;
+  let accountInfo: Account;
+
   const handleLogin = async () => {
     if (usernameIn.trim().length === 0 || passwordIn.trim().length === 0) {
       console.error('fields in the login form cannot be empty');
       alert('Try Again: Please Fill In Both Username And Password To Login.');
       return;
     }
+
     console.log('Attempting To Login as: ', usernameIn);
-    const [exists, accountInfo] = await AuthorizeUser(usernameIn, passwordIn);
+    try {
+      [exists, accountInfo] = await AuthorizeUser(usernameIn, passwordIn);
+      console.log('Exists:', exists, 'Account Info:', accountInfo);
+    } catch (err) {
+      console.error(err);
+      throw new Error(`Failed To Authorize User: ${usernameIn}\n` + err);
+    }
     const appState: AppState = { active: false, admin: false };
 
     if (!exists) {

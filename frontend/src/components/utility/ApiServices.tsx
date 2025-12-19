@@ -5,7 +5,7 @@ export async function AuthorizeUser(
   username: string,
   password: string
 ): Promise<[boolean, Account]> {
-  let exists: boolean = false;
+  let exists: boolean;
   let account: Account = {} as Account;
 
   try {
@@ -23,11 +23,16 @@ export async function AuthorizeUser(
       exists = false;
       throw new Error('Response Status: Unsuccessful');
     }
+    if (response.data.active !== true) {
+      exists = false;
+      throw new Error('User Does Not Exist');
+    }
     exists = true;
     account = response.data;
     return [exists, account];
   } catch (err) {
     console.error(err);
+    alert('Error: User Not In Database...');
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }
