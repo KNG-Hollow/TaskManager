@@ -1,20 +1,23 @@
-//import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { UseAppState } from '../../context/Context';
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UseAppState, UseErrorState } from '../../context/Context';
+import type { ErrorState } from './Interfaces';
+//import { useEffect } from 'react';
 
 export default function Error() {
-  const location = useLocation();
-  const data = location.state;
+  const { errorState, setErrorState } = UseErrorState();
   const { appState } = UseAppState();
   const navigate = useNavigate();
 
+  const blankError: ErrorState = { active: false, title: '', message: '' };
+
+  console.log('appState variable when entering /error: ', appState);
+  /*
   useEffect(() => {
     if (!appState?.active) {
       navigate('/login');
     }
   }, [navigate, appState]);
-
+  */
   return (
     <div className="mx-auto flex h-full w-full flex-col">
       <div
@@ -23,17 +26,28 @@ export default function Error() {
       >
         <h1>Error</h1>
       </div>
-      <div className="mx-auto flex h-4/5 w-full justify-center text-xl text-red-500">
+      <div className="mx-auto flex h-4/5 w-full flex-col justify-center text-xl text-red-500">
         <div id="error-container" className="flex w-full flex-col">
           <div id="error-header"></div>
           <div id="error-info" className="mt-5">
             <h3>Error Title: </h3>
-            <h3>{data?.title}</h3>
+            <h3>{errorState?.title}</h3>
           </div>
           <div id="error-message" className="mt-20">
             <h4>Error Message: </h4>
-            <p>{data?.message}</p>
+            <p>{errorState?.message}</p>
           </div>
+        </div>
+        <div id="button-container" className="mt-10">
+          <button
+            onClick={() => {
+              setErrorState(blankError);
+              console.log("Error State When Leaving '/error': ", blankError);
+              navigate('/home');
+            }}
+          >
+            Go Home
+          </button>
         </div>
       </div>
     </div>
