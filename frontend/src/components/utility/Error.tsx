@@ -26,8 +26,8 @@ export default function Error() {
       >
         <h1>Error</h1>
       </div>
-      <div className="mx-auto flex h-4/5 w-full flex-col justify-center text-xl text-red-500">
-        <div id="error-container" className="flex w-full flex-col">
+      <div className="mx-auto flex h-4/5 w-full flex-col justify-center text-xl">
+        <div id="error-container" className="flex w-full flex-col text-red-500">
           <div id="error-header"></div>
           <div id="error-info" className="mt-5">
             <h3>Error Title: </h3>
