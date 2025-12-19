@@ -16,10 +16,10 @@ export default function Home() {
 
   return (
     <div className="flex h-full w-full flex-1 flex-col self-center px-4">
-      <div className="header">
-        <h2>Welcome Home</h2>
+      <div className="flex h-1/5 w-full items-center justify-center border-4 bg-fuchsia-800 text-2xl font-bold">
+        <h2>Welcome Home {account?.username}</h2>
       </div>
-      <div className="component-view">
+      <div className="mx-auto flex h-4/5 w-full">
         <div id="home-container">
           <div id="home-info"></div>
           <div id="active-tasks"></div>

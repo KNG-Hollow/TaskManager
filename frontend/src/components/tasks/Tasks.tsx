@@ -1,20 +1,16 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UseAppState } from '../../context/Context';
 
 export default function Tasks() {
-    const [isActive, setActive] = useState<boolean | null>();
-    const [isAdmin, setAllowed] = useState<boolean | null>(null);
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-        if (!isActive) {
-            return () => {
-                navigate("/error")
-            }
-        }
-    }, [navigate, isActive]);
+  const navigate = useNavigate();
+  const { appState } = UseAppState();
 
-    return (
-        <h1>Routing Works!</h1>
-    )
+  useEffect(() => {
+    if (!appState?.active) {
+      navigate('/error');
+    }
+  }, [navigate, appState]);
+
+  return <h1>Routing Works!</h1>;
 }

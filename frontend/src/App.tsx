@@ -10,6 +10,7 @@ import Account from './components/accounts/ViewAccount';
 import Accounts from './components/accounts/Accounts';
 import Task from './components/tasks/ViewTask';
 import Tasks from './components/tasks/Tasks';
+import Logout from './components/utility/Logout';
 
 export default function App() {
   const { appState } = UseAppState();
@@ -18,14 +19,15 @@ export default function App() {
     <Router>
       <Navigation />
       <Routes>
+        <Route path="/" element={appState?.active ? <Home /> : <Login />} />
         <Route path="/home" Component={Home} />
         <Route path="/login" Component={Login} />
+        <Route path="/logout" Component={Logout} />
         <Route path="/accounts/:id" Component={Account} />
         <Route path="/accounts" Component={Accounts} />
         <Route path="/tasks/:id" Component={Task} />
         <Route path="/tasks" Component={Tasks} />
         <Route path="/error" Component={Error} />
-        <Route path="/" element={appState?.active ? <Home /> : <Login />} />
       </Routes>
       <Footer />
     </Router>

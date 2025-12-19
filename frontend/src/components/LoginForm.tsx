@@ -44,38 +44,40 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col self-center px-4">
-      <div className="header">
+    <div className="flex h-full w-full flex-col px-4">
+      <div className="flex h-1/5 w-full items-center justify-center border-4 bg-fuchsia-800 text-xl">
         <h2>Login</h2>
       </div>
-      <div className="">
-        <div id="login-container">
+      <div className="flex h-4/5 w-full justify-center">
+        <div id="login-container" className="mt-10 flex h-full flex-col">
           <div id="login-header"></div>
           <div id="login-info"></div>
           <div id="login-form">
-            <div id="input-username">
+            <div id="input-username" className="mb-2 flex space-x-2">
               <label htmlFor="username-area">Username:</label>
               <input
+                className="rounded-sm border-2 border-fuchsia-800 text-center"
                 type="text"
                 aria-label="username"
-                placeholder="username"
+                placeholder="..."
                 value={usernameIn}
                 onChange={(e) => setUsernameValue(e.target.value)}
               ></input>
             </div>
-            <div id="input-password">
+            <div id="input-password" className="flex space-x-3">
               <label htmlFor="password-area">Password:</label>
               <input
+                className="rounded-sm border-2 border-fuchsia-800 text-center"
                 type="password"
                 aria-label="password"
-                placeholder="password"
+                placeholder="..."
                 value={passwordIn}
                 onChange={(e) => setPasswordValue(e.target.value)}
               ></input>
             </div>
           </div>
-          <div id="login-buttons">
-            <div id="login-button">
+          <div id="login-buttons" className="mt-10">
+            <div id="login-button" className="">
               <button onClick={handleLogin}>Login</button>
             </div>
           </div>

@@ -25,6 +25,13 @@ export default function Navigation() {
           </li>
           <li>
             {isVisible ? (
+              <Link id="link-logout" to="/logout" className="text-red-500">
+                Logout
+              </Link>
+            ) : null}
+          </li>
+          <li>
+            {isVisible ? (
               <Link id="link-home" to="/home" className="text-white">
                 Home
               </Link>
