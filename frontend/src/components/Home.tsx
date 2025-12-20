@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type Task } from './utility/Interfaces';
-import { UseAccount, UseAppState } from '../context/Context';
+import { UseAccount, UseAppState, UseErrorState } from '../context/Context';
 import { GetTasks } from './utility/ApiServices';
 
 export default function Home() {
   const { account } = UseAccount();
   const { appState } = UseAppState();
+  const { errorState, setErrorState } = UseErrorState();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
   const name = account!.name.charAt(0).toUpperCase() + account!.name.slice(1);
 
-  if (!appState?.active || account === null) {
-    navigate('/login');
-  }
-
   useEffect(() => {
+    if (!appState?.active || account === null) {
+      navigate('/login');
+    }
+    if (errorState?.active) {
+      navigate('/error');
+    }
     const fetchTasks = async () => {
       let successful = false;
 
@@ -29,19 +32,23 @@ export default function Home() {
         setTasks(fetchedTasks);
       } catch (err) {
         console.error('Failed To Get Tasks Array: ' + err);
+        setErrorState({
+          active: true,
+          title: 'Failed To Get Tasks',
+          message: `GetTasks() Failed To Return An Acceptable Array :: ${err}`,
+        });
         throw new Error('Failed To Get Tasks Array: ' + err);
       }
     };
-
     fetchTasks();
-  }, [navigate, appState, account]);
+  }, [navigate, appState, account, errorState, setErrorState]);
 
   return (
     <div className="mt-12 flex w-full flex-1 flex-col">
       <div className="items-center justify-center border-6 bg-fuchsia-700 py-10 text-2xl font-bold">
         <h2>Welcome Home {name}</h2>
       </div>
-      <div className="mt-10 flex w-11/12 flex-col self-center">
+      <div className="mt-10 mb-20 flex w-11/12 flex-col self-center">
         <div id="home-container">
           <div
             id="home-info"
@@ -128,7 +135,7 @@ export default function Home() {
 
   function ActiveTasks() {
     return (
-      <div className="">
+      <div>
         <div className="justify-center">
           <div id="recent-tasks-text">
             <h2 className="">Recent Tasks:</h2>
@@ -155,7 +162,15 @@ export default function Home() {
                     id="recent-tasks-buttons"
                     className="flex flex-col border-2 border-blue-400"
                   >
-                    <button>View</button>
+                    <button
+                      onClick={() => {
+                        navigate(`/tasks/${task.id}`, {
+                          state: { id: task.id },
+                        });
+                      }}
+                    >
+                      View
+                    </button>
                     <button>Delete</button>
                   </div>
                 </tr>

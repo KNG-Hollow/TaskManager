@@ -22,7 +22,7 @@ export default function App() {
       <Navigation />
       <Routes>
         <Route path="/" element={appState?.active ? <Home /> : <Login />} />
-        <Route path="/home" Component={Home} />
+        <Route path="/home" element={appState?.active ? <Home /> : <Login />} />
         <Route path="/login" Component={Login} />
         <Route path="/logout" Component={Logout} />
         <Route path="/create-account" Component={CreateAccount} />

@@ -43,7 +43,7 @@ export default function Error() {
             <p className="mt-3 text-red-500">{errorState?.message}</p>
           </div>
         </div>
-        <div id="button-container" className="mt-10 flex justify-center">
+        <div id="button-container" className="mt-10 mb-20 flex justify-center">
           <button
             onClick={() => {
               setAppState({ active: false, admin: false });

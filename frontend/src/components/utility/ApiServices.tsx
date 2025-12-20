@@ -61,7 +61,7 @@ export async function GetTasks(): Promise<[boolean, Task[]]> {
   }
 }
 
-export async function ViewTask(id: number): Promise<[boolean, Task]> {
+export async function GetTask(id: number): Promise<[boolean, Task]> {
   let received: boolean;
   let task: Task;
 
