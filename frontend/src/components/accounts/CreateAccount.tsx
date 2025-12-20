@@ -13,7 +13,7 @@ export default function CreateAccount() {
   }, [navigate, appState]);
 
   return (
-    <div className="w-full flex-1 flex-col">
+    <div className="mt-12 w-full flex-1 flex-col">
       <h1>Routing Works!</h1>
     </div>
   );

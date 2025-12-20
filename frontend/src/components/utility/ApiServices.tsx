@@ -40,22 +40,45 @@ export async function AuthorizeUser(
 }
 
 export async function GetTasks(): Promise<[boolean, Task[]]> {
-  let successful: boolean;
+  let received: boolean;
   let tasks: Task[];
 
   try {
     const response = await axios.get<Task[]>(apiHost + '/tasks');
-    console.log('Raw API Response: ', response.data);
+    const data = response.data;
+    console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Ok) {
-      successful = false;
+      received = false;
       throw new Error('Response Status: Unsuccessful');
     }
-    successful = true;
-    tasks = response.data;
-    return [successful, tasks];
+    received = true;
+    tasks = data;
+    return [received, tasks];
   } catch (err) {
     console.error(err);
     alert('Error: Failed To Get Tasks...' + err);
+    throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
+
+export async function ViewTask(id: number): Promise<[boolean, Task]> {
+  let received: boolean;
+  let task: Task;
+
+  try {
+    const response = await axios.get<Task>(apiHost + `/tasks/${id}`);
+    const data = response.data;
+    console.log('Raw API Response: ', data);
+    if (response.status !== HttpStatusCode.Ok) {
+      received = false;
+      throw new Error('Response Status: Unsuccessful');
+    }
+    received = true;
+    task = data;
+    return [received, task];
+  } catch (err) {
+    console.error(err);
+    alert(`Error: Failed To Get Task [${id}]:` + err);
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }

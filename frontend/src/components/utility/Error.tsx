@@ -19,7 +19,7 @@ export default function Error() {
   }, [navigate, appState, setErrorState]);
 
   return (
-    <div className="mx-auto w-4/5 flex-1 flex-col">
+    <div className="mx-auto mt-12 w-4/5 flex-1 flex-col">
       <div
         id="container-header"
         className="mt-10 mb-10 flex items-center justify-center text-2xl font-bold text-red-700"

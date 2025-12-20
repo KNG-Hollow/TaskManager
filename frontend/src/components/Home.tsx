@@ -9,15 +9,15 @@ export default function Home() {
   const { appState } = UseAppState();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const name = account!.name.charAt(0).toUpperCase() + account!.name.slice(1);
+
+  if (!appState?.active || account === null) {
+    navigate('/login');
+  }
 
   useEffect(() => {
     const fetchTasks = async () => {
       let successful = false;
-
-      if (!appState?.active) {
-        navigate('/login');
-        return;
-      }
 
       try {
         const [fetchSuccessful, fetchedTasks] = await GetTasks();
@@ -34,12 +34,12 @@ export default function Home() {
     };
 
     fetchTasks();
-  }, [navigate, appState]);
+  }, [navigate, appState, account]);
 
   return (
-    <div className="flex w-full flex-1 flex-col">
+    <div className="mt-12 flex w-full flex-1 flex-col">
       <div className="items-center justify-center border-6 bg-fuchsia-700 py-10 text-2xl font-bold">
-        <h2>Welcome Home {account?.name}</h2>
+        <h2>Welcome Home {name}</h2>
       </div>
       <div className="mt-10 flex w-11/12 flex-col self-center">
         <div id="home-container">
@@ -128,39 +128,43 @@ export default function Home() {
 
   function ActiveTasks() {
     return (
-      <>
+      <div className="">
         <div className="justify-center">
           <div id="recent-tasks-text">
             <h2 className="">Recent Tasks:</h2>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center">
-          <table>
+          <table className="w-11/12">
             <thead>
               <tr>
-                <th>Table Head</th>
+                <th>Title:</th>
+                <th>Created:</th>
+                <th>Created By:</th>
+                <th>Active:</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>{tasks.at(0)?.name}</td>
-              </tr>
-              <tr>
-                <td>{tasks.at(0)?.description}</td>
-              </tr>
-              <tr>
-                <td>{}</td>
-              </tr>
-              <tr>
-                <td>{tasks.at(0)?.username}</td>
-              </tr>
-              <tr>
-                <td>{tasks.at(0)?.active ? 'Active' : 'Inactive'}</td>
-              </tr>
+              {tasks.map((task: Task) => (
+                <tr key={task.id} className="border-2 border-blue-400">
+                  <td>{task.name}</td>
+                  <td>{task.created.toLocaleString().slice(0, 10)}</td>
+                  <td>{task.username}</td>
+                  <td>{task.active ? 'True' : 'False'}</td>
+                  <div
+                    id="recent-tasks-buttons"
+                    className="flex flex-col border-2 border-blue-400"
+                  >
+                    <button>View</button>
+                    <button>Delete</button>
+                  </div>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-      </>
+        <div id="recent-tasks-buttons"></div>
+      </div>
     );
   }
 }

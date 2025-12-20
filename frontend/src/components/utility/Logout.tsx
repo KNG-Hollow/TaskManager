@@ -36,7 +36,7 @@ export default function Logout() {
   }, [navigate, appState, setAppState]);
 
   return (
-    <div className="flex w-full flex-1 flex-col items-center">
+    <div className="mt-12 flex w-full flex-1 flex-col items-center">
       <div className="mt-10 mb-10 flex justify-center self-center text-2xl font-bold">
         <h2>Logging Out</h2>
       </div>

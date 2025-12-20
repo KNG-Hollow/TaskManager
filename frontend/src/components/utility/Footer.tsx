@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <div
       id="footer"
-      className="w-full justify-center bg-fuchsia-700 py-1 align-middle"
+      className="fixed bottom-0 left-0 w-full scale-z-100 justify-center bg-fuchsia-700 py-1 align-middle"
     >
       <div id="footer-text">{footer()}</div>
     </div>
