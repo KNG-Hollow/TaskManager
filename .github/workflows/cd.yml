@@ -1,0 +1,28 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy Frontend
+        working-directory: frontend
+        run: |
+          # Push To Hosting Site If Interested
+          docker build -t knghollow/taskmanager-frontend .
+          docker push knghollow/taskmanager-fronted:dev
+
+      - name: Deploy Backend
+        working-directory: backend
+        run: |
+          docker build -t knghollow/taskmanager-backend .
+          docker push knghollow/taskmanager-backend
+          
