@@ -17,12 +17,12 @@ jobs:
         working-directory: frontend
         run: |
           # Push To Hosting Site If Interested
-          docker build -t knghollow/taskmanager-frontend
+          docker build -t knghollow/taskmanager-frontend .
           docker push knghollow/taskmanager-fronted:dev
 
       - name: Deploy Backend
         working-directory: backend
         run: |
-          docker build -t knghollow/taskmanager-backend
+          docker build -t knghollow/taskmanager-backend .
           docker push knghollow/taskmanager-backend
           
