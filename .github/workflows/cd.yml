@@ -13,10 +13,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v1
+        with:
+          version: latest
+
+      - name: Build Docker Images
+        run: docker compose -f docker-compose.yml build
+
+      - name: Run Container Tests
+        run: docker compose -f docker-compose.yml up --abort-on-container-exit
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Deploy Frontend
         working-directory: frontend
         run: |
-          # Push To Hosting Site If Interested
           docker build -t knghollow/taskmanager-frontend:dev .
           docker push knghollow/taskmanager-frontend:dev
 
