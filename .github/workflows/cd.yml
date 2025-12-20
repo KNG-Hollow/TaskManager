@@ -22,10 +22,10 @@ jobs:
           version: latest
 
       - name: Build Docker Images
-        run: docker compose -f docker-compose.yml build
+        run: docker compose -f compose.yaml build
 
       - name: Run Container Tests
-        run: docker compose -f docker-compose.yml up --abort-on-container-exit
+        run: docker compose -f compose.yaml up --abort-on-container-exit
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
