@@ -19,31 +19,31 @@ export default function Error() {
   }, [navigate, appState, setErrorState]);
 
   return (
-    <div className="mx-auto flex h-full w-full flex-col">
+    <div className="mx-auto w-4/5 flex-1 flex-col">
       <div
         id="container-header"
-        className="flex h-1/5 w-full items-center justify-center text-2xl font-bold text-red-700"
+        className="mt-10 mb-10 flex items-center justify-center text-2xl font-bold text-red-700"
       >
         <h1>Error</h1>
       </div>
-      <div className="mx-auto flex h-4/5 w-full flex-col justify-center text-xl">
-        <div id="error-container" className="flex w-full flex-col text-red-600">
-          <div id="error-header">
+      <div className="mx-auto flex flex-col justify-center text-xl">
+        <div id="error-container" className="flex flex-col text-red-600">
+          <div id="error-header" className="mb-5 border-2 border-red-600 py-5">
             <h4>
               You Have Run Into An Error On The Website! Please Let The
               Administrator Know Of The Situation.
             </h4>
           </div>
-          <div id="error-info" className="mt-5 flex flex-col">
-            <h3>Title: </h3>
-            <h3 className="text-red-500">{errorState?.title}</h3>
+          <div id="error-info" className="mt-5 mb-5 flex flex-col">
+            <h3>Reason:</h3>
+            <h3 className="mt-3 text-red-500">* {errorState?.title} *</h3>
           </div>
-          <div id="error-message" className="flex flex-col">
+          <div id="error-message" className="mt-5 flex flex-col">
             <h4>Message: </h4>
-            <p className="text-red-500">{errorState?.message}</p>
+            <p className="mt-3 text-red-500">{errorState?.message}</p>
           </div>
         </div>
-        <div id="button-container" className="mt-10 flex h-1/5 justify-center">
+        <div id="button-container" className="mt-10 flex justify-center">
           <button
             onClick={() => {
               setAppState({ active: false, admin: false });

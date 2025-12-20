@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
@@ -15,16 +15,22 @@ export default function Home() {
   }, [navigate, appState]);
 
   return (
-    <div className="flex h-full w-full flex-1 flex-col self-center px-4">
-      <div className="flex h-1/5 w-full items-center justify-center border-4 bg-fuchsia-600 text-2xl font-bold">
+    <div className="flex w-full flex-1 flex-col">
+      <div className="items-center justify-center border-6 bg-fuchsia-700 py-10 text-2xl font-bold">
         <h2>Welcome Home {account?.name}</h2>
       </div>
-      <div className="mx-auto flex h-4/5 w-full flex-col">
+      <div className="mt-10 flex w-11/12 flex-col self-center">
         <div id="home-container">
-          <div id="home-info">
+          <div
+            id="home-info"
+            className="rounded-2xl border-2 border-blue-600 py-5"
+          >
             <Information />
           </div>
-          <div id="activeTasks-container">
+          <div
+            id="activeTasks-container"
+            className="mt-10 rounded-l border-2 border-blue-600 py-5"
+          >
             <ActiveTasks />
           </div>
         </div>

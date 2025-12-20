@@ -36,16 +36,19 @@ export default function Logout() {
   }, [navigate, appState, setAppState]);
 
   return (
-    <div className="flex h-full w-full flex-1 flex-col self-center px-4">
-      <div className="flex h-1/5 w-full items-center justify-center text-2xl font-bold">
+    <div className="flex w-full flex-1 flex-col items-center">
+      <div className="mt-10 mb-10 flex justify-center self-center text-2xl font-bold">
         <h2>Logging Out</h2>
       </div>
-      <div className="mx-auto flex h-4/5 w-full flex-col justify-center text-xl">
-        <div id="logout-container">
-          <div id="logout-header">
+      <div className="mt-10 flex flex-col items-center text-xl">
+        <div
+          id="logout-container"
+          className="flex flex-col items-center justify-center"
+        >
+          <div id="logout-header" className="mt-5">
             <p>
               You are being logged out in...
-              <p className="font-extrabold text-red-600">{countdown}</p>
+              <p className="mt-5 font-extrabold text-red-600">{countdown}</p>
             </p>
           </div>
           <div id="logout-info">{redirectText()}</div>

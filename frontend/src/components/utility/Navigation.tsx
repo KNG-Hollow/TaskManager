@@ -5,10 +5,14 @@ export default function Navigation() {
   const { appState } = UseAppState();
   const isActive = appState?.active ? true : false;
 
+  if (!isActive) {
+    return null;
+  }
+
   return (
-    <div className="flex w-full content-center justify-center bg-blue-600 px-6 py-3">
-      <nav className="w-full items-center px-8">
-        <ul className="mx-auto flex flex-row justify-center gap-16 self-center">
+    <div className="flex w-full content-center justify-center bg-fuchsia-700 py-3">
+      <nav className="items-center px-8">
+        <ul className="flex flex-row gap-16 self-center">
           {/*
           <li>
             {!isActive ? (

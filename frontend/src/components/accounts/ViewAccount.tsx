@@ -12,5 +12,9 @@ export default function Account() {
     }
   }, [navigate, appState]);
 
-  return <h1>Routing Works!</h1>;
+  return (
+    <div className="w-full flex-1 flex-col">
+      <h1>Routing Works!</h1>
+    </div>
+  );
 }

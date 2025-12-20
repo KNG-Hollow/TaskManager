@@ -60,19 +60,25 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col px-4">
-      <div className="flex h-1/5 w-full items-center justify-center border-4 bg-fuchsia-600 text-2xl font-bold">
+    <div className="w-full flex-1 flex-col">
+      <div className="items-center justify-center border-6 bg-fuchsia-700 py-10 text-2xl font-bold">
         <h2>Login</h2>
       </div>
-      <div className="flex h-4/5 w-full justify-center">
-        <div id="login-container" className="mt-10 flex h-full flex-col">
+      <div className="mt-15 flex justify-center">
+        <div
+          id="login-container"
+          className="mt-10 flex h-full flex-col items-center"
+        >
           <div id="login-header"></div>
           <div id="login-info"></div>
           <div id="login-form">
-            <div id="input-username" className="mb-2 flex space-x-2">
+            <div
+              id="input-username"
+              className="flex flex-row space-x-2 font-extrabold"
+            >
               <label htmlFor="username-area">Username:</label>
               <input
-                className="rounded-sm border-2 border-fuchsia-600 bg-fuchsia-200 text-center text-fuchsia-900"
+                className="rounded-sm border-2 border-fuchsia-600 bg-fuchsia-200 text-center text-fuchsia-600"
                 type="text"
                 aria-label="username"
                 placeholder="..."
@@ -83,10 +89,13 @@ export default function Login() {
                 }}
               ></input>
             </div>
-            <div id="input-password" className="flex space-x-3">
+            <div
+              id="input-password"
+              className="mt-2 flex flex-row space-x-3 font-extrabold"
+            >
               <label htmlFor="password-area">Password:</label>
               <input
-                className="rounded-sm border-2 border-fuchsia-600 bg-fuchsia-200 text-center text-fuchsia-900"
+                className="rounded-sm border-2 border-fuchsia-600 bg-fuchsia-200 text-center text-fuchsia-600"
                 type="password"
                 aria-label="password"
                 placeholder="..."
@@ -98,7 +107,7 @@ export default function Login() {
               ></input>
             </div>
           </div>
-          <div id="login-buttons" className="mt-10">
+          <div id="login-buttons" className="mt-15">
             <div id="login-button">
               <button onClick={handleLogin}>Login</button>
             </div>
