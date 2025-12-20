@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import { type Task } from './utility/Interfaces';
+import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
 
 export default function Home() {
   const { account } = UseAccount();
   const { appState } = UseAppState();
   const navigate = useNavigate();
+  const tasks: Task[] = [];
 
   useEffect(() => {
     if (!appState?.active) {
@@ -29,7 +30,7 @@ export default function Home() {
           </div>
           <div
             id="activeTasks-container"
-            className="mt-10 rounded-l border-2 border-blue-600 py-5"
+            className="mt-10 mb-10 rounded-l border-2 border-blue-600 py-5"
           >
             <ActiveTasks />
           </div>
@@ -37,64 +38,105 @@ export default function Home() {
       </div>
     </div>
   );
-}
 
-function Information() {
-  const { appState } = UseAppState();
-  const navigate = useNavigate();
-  const adminVisible = appState?.admin === true ? true : false;
-  const adminButtons = () => {
-    if (!adminVisible) {
-      return null;
-    }
+  function Information() {
+    const { appState } = UseAppState();
+    const navigate = useNavigate();
+    const adminVisible = appState?.admin === true ? true : false;
+
+    const adminButtons = () => {
+      if (!adminVisible) {
+        return null;
+      }
+      return (
+        <div
+          id="button-container-admin"
+          className="flex w-1/2 flex-col self-center"
+        >
+          <button
+            onClick={() => {
+              navigate('/create-account');
+            }}
+          >
+            Create Account
+          </button>
+          <button
+            onClick={() => {
+              navigate('/accounts');
+            }}
+          >
+            Accounts
+          </button>
+        </div>
+      );
+    };
+
     return (
-      <div id="button-container-admin">
-        <button
-          onClick={() => {
-            navigate('/create-account');
-          }}
-        >
-          Create Account
-        </button>
-        <button
-          onClick={() => {
-            navigate('/accounts');
-          }}
-        >
-          Accounts
-        </button>
+      <div className="">
+        <div id="information-text-header">
+          <h2>Info</h2>
+        </div>
+        <div id="information-text-container">
+          <h2 className="">Total Tasks: {tasks.length}</h2>
+        </div>
+        <div id="button-container" className="flex flex-col">
+          <div
+            id="button-container-task"
+            className="flex w-1/2 flex-col self-center"
+          >
+            <button
+              onClick={() => {
+                navigate('/create-task');
+              }}
+            >
+              Create Task
+            </button>
+            <button
+              onClick={() => {
+                navigate('/tasks');
+              }}
+            >
+              Tasks
+            </button>
+          </div>
+          {adminButtons()}
+        </div>
       </div>
     );
-  };
+  }
 
-  return (
-    <div>
-      <h2>Info</h2>
-      <div id="button-container">
-        <button
-          onClick={() => {
-            navigate('/create-task');
-          }}
-        >
-          Create Task
-        </button>
-        <button
-          onClick={() => {
-            navigate('/tasks');
-          }}
-        >
-          Tasks
-        </button>
-      </div>
-      {adminButtons()}
-    </div>
-  );
-}
-
-function ActiveTasks() {
-  return (
-    <div>
-      <h2>Beans</h2>
-    </div>
-  );
+  function ActiveTasks() {
+    return (
+      <>
+        <div className="justify-center">
+          <div id="recent-tasks-text">
+            <h2 className="">Recent Tasks:</h2>
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center">
+          <table>
+            <thead>
+              <tr>
+                <th>Table Head</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Table</td>
+              </tr>
+              <tr>
+                <td>Body</td>
+              </tr>
+              <tr>
+                <td>Row</td>
+              </tr>
+              <tr>
+                <td>Data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </>
+    );
+  }
 }
