@@ -30,7 +30,7 @@ jobs:
       - name: Set up Go Environment
         uses: actions/setup-go@v6
         with:
-            go-version: latest
+          go-version-file: 'go.mod'
 
       - name: Install Backend Dependencies
         working-directory: backend
