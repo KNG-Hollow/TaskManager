@@ -1,5 +1,7 @@
 import axios, { HttpStatusCode } from 'axios';
-import { type Account } from './Interfaces';
+import type { Account, Task } from './Interfaces';
+
+const apiHost: string = 'http://localhost:8081/api';
 
 export async function AuthorizeUser(
   username: string,
@@ -10,7 +12,7 @@ export async function AuthorizeUser(
 
   try {
     const response = await axios.post<Account>(
-      'http://localhost:8081/api/auth',
+      apiHost + '/auth',
       {
         username,
         password,
@@ -33,6 +35,27 @@ export async function AuthorizeUser(
   } catch (err) {
     console.error(err);
     alert('Error: User Not In Database...');
+    throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
+
+export async function GetTasks(): Promise<[boolean, Task[]]> {
+  let successful: boolean;
+  let tasks: Task[];
+
+  try {
+    const response = await axios.get<Task[]>(apiHost + '/tasks');
+    console.log('Raw API Response: ', response.data);
+    if (response.status !== HttpStatusCode.Ok) {
+      successful = false;
+      throw new Error('Response Status: Unsuccessful');
+    }
+    successful = true;
+    tasks = response.data;
+    return [successful, tasks];
+  } catch (err) {
+    console.error(err);
+    alert('Error: Failed To Get Tasks...' + err);
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }

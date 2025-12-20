@@ -12,7 +12,7 @@ export interface Task {
   name: string;
   description: string;
   created: Date;
-  createdBy: string;
+  username: string;
   active: boolean;
 }
 

@@ -1,18 +1,39 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
+import { GetTasks } from './utility/ApiServices';
 
 export default function Home() {
   const { account } = UseAccount();
   const { appState } = UseAppState();
   const navigate = useNavigate();
-  const tasks: Task[] = [];
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    if (!appState?.active) {
-      navigate('/login');
-    }
+    const fetchTasks = async () => {
+      let successful = false;
+
+      if (!appState?.active) {
+        navigate('/login');
+        return;
+      }
+
+      try {
+        const [fetchSuccessful, fetchedTasks] = await GetTasks();
+        successful = fetchSuccessful;
+        if (!successful) {
+          alert('Failed To Get Tasks');
+          throw new Error('Failed To Get Tasks array');
+        }
+        setTasks(fetchedTasks);
+      } catch (err) {
+        console.error('Failed To Get Tasks Array: ' + err);
+        throw new Error('Failed To Get Tasks Array: ' + err);
+      }
+    };
+
+    fetchTasks();
   }, [navigate, appState]);
 
   return (
@@ -122,16 +143,19 @@ export default function Home() {
             </thead>
             <tbody>
               <tr>
-                <td>Table</td>
+                <td>{tasks.at(0)?.name}</td>
               </tr>
               <tr>
-                <td>Body</td>
+                <td>{tasks.at(0)?.description}</td>
               </tr>
               <tr>
-                <td>Row</td>
+                <td>{}</td>
               </tr>
               <tr>
-                <td>Data</td>
+                <td>{tasks.at(0)?.username}</td>
+              </tr>
+              <tr>
+                <td>{tasks.at(0)?.active ? 'Active' : 'Inactive'}</td>
               </tr>
             </tbody>
           </table>
