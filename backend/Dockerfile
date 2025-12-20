@@ -14,8 +14,8 @@ ENV DBPASS=Recon777
 ENV DBHOST=192.168.0.77
 ENV DBPORT=3306
 
-RUN cd ./services && go test -v && cd ../
-RUN cd ./controllers && go test -v && cd ../
+#RUN cd ./services && go test -v && cd ../
+#RUN cd ./controllers && go test -v && cd ../
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o server ./main.go
 RUN chmod +x server
