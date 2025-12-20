@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { type Task } from './utility/Interfaces';
+//import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState } from '../context/Context';
 
 export default function Home() {
@@ -46,26 +46,25 @@ function Information() {
   const adminButtons = () => {
     if (!adminVisible) {
       return null;
-    } else {
-      return (
-        <div id="button-container-admin">
-          <button
-            onClick={() => {
-              navigate('/create-account');
-            }}
-          >
-            Create Account
-          </button>
-          <button
-            onClick={() => {
-              navigate('/accounts');
-            }}
-          >
-            Accounts
-          </button>
-        </div>
-      );
     }
+    return (
+      <div id="button-container-admin">
+        <button
+          onClick={() => {
+            navigate('/create-account');
+          }}
+        >
+          Create Account
+        </button>
+        <button
+          onClick={() => {
+            navigate('/accounts');
+          }}
+        >
+          Accounts
+        </button>
+      </div>
+    );
   };
 
   return (
