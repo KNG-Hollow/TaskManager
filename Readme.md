@@ -2,25 +2,25 @@
 
 # TaskManager
 
-An Easy-To-Use Web Application Built With **Go** And **Typescript**, All Orchestrated With **Docker Compose**.
+An Easy-To-Use, browser-based 'To-Do List' that connects to a *MariaDB/MySQL* Database Service of your choosing. Great for public computers with multiple accounts, or team coordination on a shared resource. Built With *Go* And *Typescript*, All Orchestrated With *Docker Compose*.
 
 ## Introduction
 
-1. You **MUST** have [**Docker Compose**](https://docs.docker.com/compose/install) installed to be able to build and run the application with the `./compose.yaml file`
+1. You **MUST** Have [**Docker Compose**](https://docs.docker.com/compose/install) Installed To Be Able To Build And Run The Application With The `./compose.yaml` File.
 
-2. Create The Environment Variables `DBUSER`, `DBPASS`, `DBHOST`, `DBPORT`, `DBNAME` And Place Into A `.env` File In The Project Root As A **key**=**value** List:
+2. Define The Environment Variables `DBUSER`, `DBPASS`, `DBHOST`, `DBPORT`, `DBNAME` In A `.env` File In The Project's Root As A **key**=**value** Pair List:
 
-    * Database System *MUST* Be [***MariaDB***](https://mariadb.com/) Or [***MySQL***](https://www.mysql.com/), As These Are Compatible With The Drivers ***Go*** Will Be Using
+    * Database System *MUST* Be [***MariaDB***](https://mariadb.com/) Or [***MySQL***](https://www.mysql.com/), As These Are Compatible With The Drivers The ***Backend Service*** Will Be Using.
 
-    * The Variables *MUST* Point To Active ***MySQL/MariaDB*** Server Credentials to Connect
+    * The Variables *MUST* Point To Active ***MySQL/MariaDB*** Database Credentials to Connect Successfully.
 
-    * Database *MUST* support **TCP**
+    * Database *MUST* Support **TCP** Transfers.
 
-    * A **SQL-Script** Is Provided At `./database/create-tables.sql` To Help Populate A New ***MariaDB/MySQL*** Database's Tables
+    * A **SQL-Script** Is Provided At `./database/create-tables.sql` To Help Populate A New Database's Tables
 
-    * The Database *Must* Be Called `taskmanager` For The *Backend Service* To Connect
+    * The Database *Must* Be Called `taskmanager` For The ***Backend Service*** To Connect
 
-    *Example .env* :
+    *Example **.env*** :
 
         DBUSER=Beans
         DBPASS=superSecret
@@ -28,14 +28,14 @@ An Easy-To-Use Web Application Built With **Go** And **Typescript**, All Orchest
         DBPORT=3306
         DBNAME=taskmanager
 
-3. **(If Interested) The Compiled Asset-files Are Available At :**
+3. ***(If Interested)* The Compiled Asset-files Are Available For Your Convenience At :**
 
     * **Backend :**
       * `./backend/TM-Server` **(Executable)**
       * [Dockerhub Image](https://hub.docker.com/repository/docker/knghollow/taskmanager-backend/general)
   
     * **Frontend :**
-      * `./frontend/dist/` **(build files)**
+      * `./frontend/dist/` **(Build Files)**
       * [Dockerhub Image](https://hub.docker.com/repository/docker/knghollow/taskmanager-frontend/general)
 
 ## How To Use
