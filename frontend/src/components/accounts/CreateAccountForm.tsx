@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UseAppState } from '../../context/Context';
 
-export default function CreateTask() {
+// TODO Only Allow Admin Accounts To Create Accounts
+
+export default function CreateAccountForm() {
   const navigate = useNavigate();
   const { appState } = UseAppState();
 
   useEffect(() => {
-    if (!appState?.active) {
+    if (!appState?.active || !appState?.admin) {
       navigate('/error');
     }
   }, [navigate, appState]);

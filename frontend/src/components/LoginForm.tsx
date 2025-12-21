@@ -69,7 +69,6 @@ export default function Login() {
           id="login-container"
           className="mt-10 flex h-full flex-col items-center"
         >
-          <div id="login-header"></div>
           <div id="login-info"></div>
           <div id="login-form">
             <div

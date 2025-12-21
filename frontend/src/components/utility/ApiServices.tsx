@@ -34,7 +34,55 @@ export async function AuthorizeUser(
     return [exists, account];
   } catch (err) {
     console.error(err);
-    alert('Error: User Not In Database...');
+    alert(`Error: ${err}`);
+    throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
+
+export async function CreateTask(
+  account: Account,
+  title: string,
+  description: string
+): Promise<[boolean, HttpStatusCode]> {
+  let successful: boolean;
+  const timestamp = new Date().toISOString();
+  const username = account.username;
+  const active = true;
+  const task: Task = {
+    id: null,
+    name: title,
+    description: description,
+    created: timestamp,
+    username: username,
+    active: active,
+  };
+
+  try {
+    const response = await axios.post<Task>(
+      apiHost + '/tasks',
+      {
+        id: task.id,
+        name: task.name,
+        description: task.description,
+        created: task.created,
+        username: task.username,
+        active: task.active,
+      },
+      {
+        //withCredentials: true,
+      }
+    );
+    if (response.status !== HttpStatusCode.Created) {
+      console.error('Http Status Code Is Not [Created]: ' + response.status);
+      successful = false;
+      throw new Error('Unexpected Response Status');
+    }
+    console.log('Raw Response Data: ' + response.data);
+    successful = true;
+    return [successful, response.status];
+  } catch (err) {
+    console.error(err);
+    alert(`Error: Failed To Create Task: ${err}`);
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }
@@ -78,7 +126,27 @@ export async function GetTask(id: number): Promise<[boolean, Task]> {
     return [received, task];
   } catch (err) {
     console.error(err);
-    alert(`Error: Failed To Get Task [${id}]:` + err);
+    alert(`Error: Failed To Get Task [${id}]: ` + err);
+    throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
+
+export async function DeleteTask(id: number): Promise<[boolean, number]> {
+  let success: boolean;
+
+  try {
+    const response = await axios.delete<number>(apiHost + `/tasks/${id}`);
+    const data = response.data;
+    console.log('Raw API Response: ', data);
+    if (response.status !== HttpStatusCode.Accepted) {
+      success = false;
+      throw new Error('Unexpected Response Status!');
+    }
+    success = true;
+    return [success, data];
+  } catch (err) {
+    console.error(err);
+    alert(`Error: Failed To Get Task [${id}]: ` + err);
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }

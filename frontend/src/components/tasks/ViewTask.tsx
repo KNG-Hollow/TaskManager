@@ -4,6 +4,8 @@ import { UseAppState, UseErrorState } from '../../context/Context';
 import { GetTask } from '../utility/ApiServices';
 import type { Task } from '../utility/Interfaces';
 
+// TODO Only Allow Users To Delete Their Own Tasks
+
 export default function ViewTask() {
   const navigate = useNavigate();
   const { appState } = UseAppState();
@@ -24,18 +26,17 @@ export default function ViewTask() {
         const [fetchSuccessful, fetchedTask] = await GetTask(id);
         successful = fetchSuccessful;
         if (!successful) {
-          alert(`Failed To Get Task: ${taskId}`);
           throw new Error('Failed To Get Tasks array');
         }
         setTask(fetchedTask);
       } catch (err) {
         console.error(`Failed To Get Task ${taskId}: ` + err);
+        alert(`Failed To Get Task: ${taskId}`);
         setErrorState({
           active: true,
-          title: 'Failed To Get Task',
-          message: `GetTask(id: number) Failed To Return An Acceptable Object :: ${err}`,
+          title: 'Failed To Get Task!',
+          message: `Failed To Return An Acceptable Task Object With ID [${id}] :: ${err}`,
         });
-        throw new Error('Failed To Get Tasks Array: ' + err);
       }
     };
     fetchTask(taskId);
@@ -69,6 +70,15 @@ export default function ViewTask() {
           <div className="mt-4">
             <p>{task?.description.trim() === '' ? 'N/A' : task?.description}</p>
           </div>
+        </div>
+        <div
+          id="button-container"
+          className="mt-10 flex flex-col justify-center gap-y-5"
+        >
+          <button onClick={() => navigate(`/tasks/${task?.id}`)}>
+            Edit Task
+          </button>
+          <button onClick={() => navigate(-1)}>Back</button>
         </div>
       </div>
     </div>

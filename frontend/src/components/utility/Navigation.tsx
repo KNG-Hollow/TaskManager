@@ -48,7 +48,7 @@ export default function Navigation() {
               <Link
                 id="link-logout"
                 to="/logout"
-                className="font-extrabold text-red-600"
+                className="font-extrabold text-red-700"
               >
                 Logout
               </Link>
@@ -59,7 +59,7 @@ export default function Navigation() {
               <Link
                 id="link-error"
                 to="/error"
-                className="font-extrabold text-red-600"
+                className="font-extrabold text-red-700"
               >
                 Error Page
               </Link>

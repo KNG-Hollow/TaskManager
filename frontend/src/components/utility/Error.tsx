@@ -1,22 +1,36 @@
 import { useNavigate } from 'react-router-dom';
-import { UseAppState, UseErrorState } from '../../context/Context';
+import { UseAccount, UseAppState, UseErrorState } from '../../context/Context';
 import { useEffect } from 'react';
 
 export default function Error() {
   const { errorState, setErrorState } = UseErrorState();
   const { appState, setAppState } = UseAppState();
+  const { account } = UseAccount();
   const navigate = useNavigate();
 
   console.log('appState when entering /error: ', appState);
   useEffect(() => {
-    if (!appState?.active) {
+    if (!appState?.active && account === null && !errorState?.active) {
       setErrorState({
         active: true,
         title: 'Not Authorized',
         message: 'You Do Not Have Access! Please Restart And Log Back In...',
       });
+      return;
     }
-  }, [navigate, appState, setErrorState]);
+    if (account?.admin && !appState?.admin) {
+      setAppState({ active: false, admin: true });
+    } else if (!account?.admin && appState?.admin) {
+      setAppState({ active: false, admin: false });
+    }
+  }, [
+    account,
+    appState?.active,
+    appState?.admin,
+    errorState?.active,
+    setAppState,
+    setErrorState,
+  ]);
 
   return (
     <div className="mx-auto mt-12 w-4/5 flex-1 flex-col">

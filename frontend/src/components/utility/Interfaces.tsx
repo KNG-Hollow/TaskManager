@@ -8,10 +8,10 @@ export interface Account {
 }
 
 export interface Task {
-  id: number;
+  id: number | null;
   name: string;
   description: string;
-  created: Date;
+  created: Date | string;
   username: string;
   active: boolean;
 }

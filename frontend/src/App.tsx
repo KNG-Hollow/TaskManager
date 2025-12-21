@@ -11,8 +11,10 @@ import Accounts from './components/accounts/Accounts';
 import Task from './components/tasks/ViewTask';
 import Tasks from './components/tasks/Tasks';
 import Logout from './components/utility/Logout';
-import CreateAccount from './components/accounts/CreateAccount';
-import CreateTask from './components/tasks/CreateTask';
+import CreateAccountForm from './components/accounts/CreateAccountForm';
+import CreateTaskForm from './components/tasks/CreateTaskForm';
+import EditAccountForm from './components/accounts/EditAccountForm';
+import EditTaskForm from './components/tasks/EditTaskForm';
 
 export default function App() {
   const { appState } = UseAppState();
@@ -25,10 +27,12 @@ export default function App() {
         <Route path="/home" element={appState?.active ? <Home /> : <Login />} />
         <Route path="/login" Component={Login} />
         <Route path="/logout" Component={Logout} />
-        <Route path="/create-account" Component={CreateAccount} />
+        <Route path="/create-account" Component={CreateAccountForm} />
+        <Route path="/edit-account/:id" Component={EditAccountForm} />
         <Route path="/accounts/:id" Component={Account} />
         <Route path="/accounts" Component={Accounts} />
-        <Route path="/create-task" Component={CreateTask} />
+        <Route path="/create-task" Component={CreateTaskForm} />
+        <Route path="/edit-task/:id" Component={EditTaskForm} />
         <Route path="/tasks/:id" Component={Task} />
         <Route path="/tasks" Component={Tasks} />
         <Route path="/error" Component={Error} />

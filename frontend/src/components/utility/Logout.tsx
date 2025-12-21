@@ -45,11 +45,9 @@ export default function Logout() {
           id="logout-container"
           className="flex flex-col items-center justify-center"
         >
-          <div id="logout-header" className="mt-5">
-            <p>
-              You are being logged out in...
-              <p className="mt-5 font-extrabold text-red-600">{countdown}</p>
-            </p>
+          <div id="logout-header" className="mt-5 flex flex-col justify-center">
+            <p>You are being logged out in...</p>
+            <p className="mt-5 font-extrabold text-red-600">{countdown}</p>
           </div>
           <div id="logout-info">{redirectText()}</div>
         </div>
