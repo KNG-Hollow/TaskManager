@@ -2,7 +2,7 @@ export default function Footer() {
   const footer = () => {
     const copyright = String.fromCodePoint(0x00a9);
     const year = new Date().getFullYear();
-    const companyName = 'KNG-Hollow';
+    const companyName = 'Jaylen Holloway';
 
     return (
       <span>{`${copyright} ${year} ${companyName}. All Rights Reserved.`}</span>

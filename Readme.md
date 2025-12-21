@@ -30,8 +30,12 @@ Create The Environment Variables `DBUSER`, `DBPASS`, `DBHOST`, `DBPORT`, `DBNAME
 
 **The compiled asset-files are in:**
 
-* **Backend:** `<root>/backend/TM-Server` **(Executable)**
-* **Frontend:** `<root>/frontend/dist/`   **(build files)**
+* **Backend :**
+  * `<root>/backend/TM-Server` **(Executable)**
+  * [Dockerhub Image](https://hub.docker.com/repository/docker/knghollow/taskmanager-backend/general)
+* **Frontend:**
+  * `<root>/frontend/dist/` **(build files)**
+  * [Dockerhub Image](https://hub.docker.com/repository/docker/knghollow/taskmanager-frontend/general)
 
 ## How To Use
 
@@ -45,7 +49,6 @@ Run The Docker Compose Manifest In The Folder:
 
 ```bash
 cd [ Cloned_Directory ]
-
 docker compose up --build
 ```
 
