@@ -8,7 +8,7 @@ An Easy-To-Use, browser-based 'To-Do List' that connects to a *MariaDB/MySQL* Da
 
 1. You **MUST** Have [**Docker Compose**](https://docs.docker.com/compose/install) Installed To Be Able To Build And Run The Application With The `./compose.yaml` File.
 
-2. Define The Environment Variables `DBUSER`, `DBPASS`, `DBHOST`, `DBPORT`, `DBNAME` In A `.env` File In The Project's Root As A **key**=**value** Pair List:
+2. Define The Environment Variables `DBUSER`, `DBPASS`, `DBHOST`, `DBPORT`, `DBNAME` In A `.env` File In The Project's Root As A **KEY**=**Value** Pair List:
 
     * Database System *MUST* Be [***MariaDB***](https://mariadb.com/) Or [***MySQL***](https://www.mysql.com/), As These Are Compatible With The Drivers The ***Backend Service*** Will Be Using.
 
