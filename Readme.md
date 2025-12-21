@@ -1,34 +1,52 @@
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+
 # TaskManager
 
-    - An Easy To Use Web Application Built With Docker-Compose 
+An Easy-To-Use Web Application Built With **Go** And **Typescript**, All Orchestrated With **Docker Compose**.
 
-## Info
+## Introduction
 
-    - You must have Docker Compose installed to be able to build 
-        and run the application with the "<root>/compose.yaml file"
+You **MUST** have [**Docker Compose**](https://docs.docker.com/compose/install) installed to be able to build and run the application with the `<root>/compose.yaml file`
 
+Create The Environment Variables `DBUSER`, `DBPASS`, `DBHOST`, `DBPORT`, `DBNAME` And Place Into A `<root>/.env` File As A **key**=**value** List:
 
-    - Create The Environment Variables [ DBUSER, DBPASS, DBHOST, DBPORT ] And
-        Place Into A "<root>/.env" File As A key=value List
+* Database System *MUST* Be [***MariaDB***](https://mariadb.com/) Or [***MySQL***](https://www.mysql.com/), As These Are Compatible With The Drivers ***Go*** Will Be Using
 
-        + Database System MUST Be MariaDB Or MySQL As These Are Compatible With
-            The Drivers {Go} Will Be Using
-        + The Variables must point to active MySQL/MariaDB server credentials to connect
-        + Database must support TCP
+* The Variables *MUST* Point To Active ***MySQL/MariaDB*** Server Credentials to Connect
 
-        + A SQL Script Is Provided At "<root>/database/create-tables.sql"
-            To Help Populate A New MariaDB/MySQL Database's Tables
+* Database *MUST* support **TCP**
 
-        * The Database Must Be Called "taskmanager" For The Backend API To Connect *
+* A **SQL-Script** Is Provided At `<root>/database/create-tables.sql` To Help Populate A New ***MariaDB/MySQL*** Database's Tables
 
+* The Database *Must* Be Called `taskmanager` For The *Backend Service* To Connect
 
-    - The compiled-asset files are in:
+*Example .env* :
 
-        + Backend: <root>/backend/TM-Server (Executable)
-        + Frontend: <root>/frontend/dist/   (build files)
+    DBUSER=Beans
+    DBPASS=superSecret
+    DBHOST=192.168.0.123
+    DBPORT=3306
+    DBNAME=taskmanager
+
+**The compiled asset-files are in:**
+
+* **Backend:** `<root>/backend/TM-Server` **(Executable)**
+* **Frontend:** `<root>/frontend/dist/`   **(build files)**
 
 ## How To Use
 
-    - RUN { docker compose up --build } to build the containers needed and run the Compose service
+Clone The Repository:
 
-    - Once the Compose service is running, insert the host's address into a browser's address bar to navigate to the website 
+```bash
+git clone https://github.com/KNG-Hollow/TaskManager.git
+```
+
+Run The Docker Compose Manifest In The Folder:
+
+```bash
+cd [ Cloned_Directory ]
+
+docker compose up --build
+```
+
+* **Once the Compose service is running, insert the host's address into a browser's address bar to navigate to the website**
