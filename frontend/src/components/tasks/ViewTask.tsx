@@ -4,7 +4,7 @@ import { UseAppState, UseErrorState } from '../../context/Context';
 import { GetTask } from '../utility/ApiServices';
 import type { Task } from '../utility/Interfaces';
 
-// TODO Only Allow Users To Delete Their Own Tasks
+// TODO Only Allow Users To Delete Their Own Tasks s
 
 export default function ViewTask() {
   const navigate = useNavigate();
