@@ -326,10 +326,18 @@ export async function UpdateTask(
   }
 }
 
-export async function DeleteAccount(id: number): Promise<[boolean, number]> {
+export async function DeleteAccount(
+  initiatorAccount: Account,
+  id: number
+): Promise<[boolean, number]> {
   let success: boolean;
 
   try {
+    if (initiatorAccount.id !== id || !initiatorAccount.admin) {
+      success = false;
+      alert('You Do Have Have Permission To Update This Account');
+      throw new Error("Initiator's Account Is Not Privileged");
+    }
     const response = await axios.delete<number>(apiHost + `/accounts/${id}`);
     const data = response.data;
     console.log('Raw API Response: ', data);

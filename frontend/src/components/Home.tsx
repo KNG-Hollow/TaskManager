@@ -155,6 +155,15 @@ export default function Home() {
             >
               Tasks
             </button>
+            <button
+              onClick={() => {
+                navigate(`/accounts/${account?.id}`, {
+                  state: { id: account?.id },
+                });
+              }}
+            >
+              View Account
+            </button>
           </div>
           {adminButtons()}
         </div>

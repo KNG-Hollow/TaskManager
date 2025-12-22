@@ -50,7 +50,7 @@ export default function ViewTask() {
         const [fetchSuccessful, fetchedTask] = await GetTask(id);
         successful = fetchSuccessful;
         if (!successful) {
-          throw new Error('Failed To Get Tasks array');
+          throw new Error('Failed To Get Task');
         }
         setTask(fetchedTask);
       } catch (err) {
@@ -112,7 +112,7 @@ export default function ViewTask() {
             <button
               className="text-red-700"
               onClick={() => {
-                if (account?.username !== task?.username && !account?.admin) {
+                if (account?.username !== task?.username || !account?.admin) {
                   alert('You Do Not Have Permission To Delete This Task');
                   return;
                 }
