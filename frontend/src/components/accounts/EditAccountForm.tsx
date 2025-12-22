@@ -121,56 +121,64 @@ export default function EditAccountForm() {
                 onChange={(e) => setPasswordValue(e.target.value)}
               />
             </div>
-            <div
-              id="input-admin"
-              className="relative right-5 flex flex-row items-center gap-x-3"
-            >
-              <label htmlFor="adminContent" className="font-extrabold">
-                Admin:
-              </label>
-              <label className="flex flex-row gap-x-2">
-                <input
-                  type="radio"
-                  value="Yes"
-                  checked={adminIn === true}
-                  onChange={() => setAdminValue(true)}
-                />
-                Yes
-              </label>
-              <label className="flex flex-row gap-x-2">
-                <input
-                  type="radio"
-                  value="No"
-                  checked={adminIn === false}
-                  onChange={() => setAdminValue(false)}
-                />
-                No
-              </label>
-            </div>
-            <div
-              id="active-state"
-              className="flex flex-row justify-center gap-x-5 font-bold"
-            >
-              <h2>Status:</h2>
-              {activeIn ? (
-                <h2 className="text-green-600">Active</h2>
-              ) : (
-                <h2 className="text-red-700">Inactive</h2>
-              )}
-            </div>
+            {account?.admin ? (
+              <>
+                <div
+                  id="input-admin"
+                  className="relative right-5 flex flex-row items-center gap-x-3"
+                >
+                  <label htmlFor="adminContent" className="font-extrabold">
+                    Admin:
+                  </label>
+                  <label className="flex flex-row gap-x-2">
+                    <input
+                      type="radio"
+                      value="Yes"
+                      checked={adminIn === true}
+                      onChange={() => setAdminValue(true)}
+                    />
+                    Yes
+                  </label>
+                  <label className="flex flex-row gap-x-2">
+                    <input
+                      type="radio"
+                      value="No"
+                      checked={adminIn === false}
+                      onChange={() => setAdminValue(false)}
+                    />
+                    No
+                  </label>
+                </div>
+                <div
+                  id="active-state"
+                  className="flex flex-row justify-center gap-x-5 font-bold"
+                >
+                  <h2>Status:</h2>
+                  {activeIn ? (
+                    <h2 className="text-green-600">Active</h2>
+                  ) : (
+                    <h2 className="text-red-700">Inactive</h2>
+                  )}
+                </div>
+                <div>
+                  <button
+                    onClick={() => {
+                      return activeIn
+                        ? setActiveValue(false)
+                        : setActiveValue(true);
+                    }}
+                  >
+                    {activeIn ? 'Deactivate' : 'Activate'}
+                  </button>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
         <div
           id="create-task-buttons"
           className="mt-5 flex flex-col items-center justify-center gap-y-2"
         >
-          <button
-            onClick={() => {
-              return activeIn ? setActiveValue(false) : setActiveValue(true);
-            }}
-          >
-            {activeIn ? 'Deactivate' : 'Activate'}
-          </button>
           <div
             id="create-account-buttons"
             className="mt-5 flex flex-col items-center justify-center gap-y-2"

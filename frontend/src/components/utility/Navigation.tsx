@@ -12,7 +12,7 @@ export default function Navigation() {
   return (
     <div className="fixed top-0 left-0 flex w-full scale-z-100 content-center justify-center bg-fuchsia-700 py-3">
       <nav className="items-center px-8">
-        <ul className="flex flex-row gap-16 self-center">
+        <ul className="flex flex-row gap-8 self-center">
           {/*
           <li>
             {!isActive ? (
