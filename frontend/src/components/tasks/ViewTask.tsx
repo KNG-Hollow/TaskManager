@@ -99,7 +99,7 @@ export default function ViewTask() {
           id="button-container"
           className="mt-10 flex flex-col items-center justify-center gap-y-5"
         >
-          {task?.username === account?.username && account?.admin ? (
+          {task?.username === account?.username || account?.admin ? (
             <button
               onClick={() =>
                 navigate(`/edit-task/${task?.id}`, { state: { task: task } })
@@ -108,7 +108,7 @@ export default function ViewTask() {
               Edit Task
             </button>
           ) : null}
-          {task?.username === account?.username && account?.admin ? (
+          {task?.username === account?.username || account?.admin ? (
             <button
               className="text-red-700"
               onClick={() => {
@@ -117,6 +117,7 @@ export default function ViewTask() {
                   return;
                 }
                 handleDelete(task!.id!);
+                navigate('/tasks');
               }}
             >
               Delete Task

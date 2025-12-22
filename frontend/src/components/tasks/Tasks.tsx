@@ -4,7 +4,7 @@ import { UseAccount, UseAppState, UseErrorState } from '../../context/Context';
 import { GetTasks, DeleteTask } from '../utility/ApiServices';
 import type { Task } from '../utility/Interfaces';
 
-// TODO Route To Only Show User's Own Tasks
+// TODO If Not Admin, Only Show User's Own Tasks
 
 export default function Tasks() {
   const { account } = UseAccount();

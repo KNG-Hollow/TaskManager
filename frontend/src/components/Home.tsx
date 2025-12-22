@@ -4,7 +4,7 @@ import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState, UseErrorState } from '../context/Context';
 import { DeleteTask, GetTasks } from './utility/ApiServices';
 
-// TODO Only Show Tasks The Account User Created
+// TODO If Not Admin, Only Show Tasks The Account User Created
 
 export default function Home() {
   const { account } = UseAccount();
