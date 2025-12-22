@@ -1,18 +1,42 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UseAppState, UseErrorState } from '../../context/Context';
-import { GetTask } from '../utility/ApiServices';
+import { UseAppState, UseErrorState, UseAccount } from '../../context/Context';
+import { DeleteTask, GetTask } from '../utility/ApiServices';
 import type { Task } from '../utility/Interfaces';
-
-// TODO Only Allow Users To Delete Their Own Tasks s
 
 export default function ViewTask() {
   const navigate = useNavigate();
   const { appState } = UseAppState();
+  const { account } = UseAccount();
   const { errorState, setErrorState } = UseErrorState();
   const location = useLocation();
   const taskId: number = location.state?.id;
   const [task, setTask] = useState<Task>();
+
+  const handleDelete = async (id: number) => {
+    let successful: boolean;
+
+    try {
+      console.log('Attempting To Delete Task With ID: ' + id);
+      const [deleteSuccessful, taskId] = await DeleteTask(id);
+      successful = deleteSuccessful;
+      if (!successful) {
+        throw new Error('Failed To Delete Task');
+      }
+      console.log('Successfully Deleted Task With ID: ' + taskId);
+      alert('Successfully Deleted Task With ID: ' + taskId);
+    } catch (err) {
+      console.error(
+        `API Service Failed To Delete Task With ID [${id}]:\n${err}`
+      );
+      alert('Failed To Delete Task');
+      setErrorState({
+        active: true,
+        title: 'Failed To Delete Task!',
+        message: `API Service Failed To Delete Task With ID [${id}]:\n${err}`,
+      });
+    }
+  };
 
   useEffect(() => {
     if (!appState?.active || errorState?.active) {
@@ -73,11 +97,31 @@ export default function ViewTask() {
         </div>
         <div
           id="button-container"
-          className="mt-10 flex flex-col justify-center gap-y-5"
+          className="mt-10 flex flex-col items-center justify-center gap-y-5"
         >
-          <button onClick={() => navigate(`/tasks/${task?.id}`)}>
-            Edit Task
-          </button>
+          {task?.username === account?.username && account?.admin ? (
+            <button
+              onClick={() =>
+                navigate(`/edit-task/${task?.id}`, { state: { task: task } })
+              }
+            >
+              Edit Task
+            </button>
+          ) : null}
+          {task?.username === account?.username && account?.admin ? (
+            <button
+              className="text-red-700"
+              onClick={() => {
+                if (account?.username !== task?.username && !account?.admin) {
+                  alert('You Do Not Have Permission To Delete This Task');
+                  return;
+                }
+                handleDelete(task!.id!);
+              }}
+            >
+              Delete Task
+            </button>
+          ) : null}
           <button onClick={() => navigate(-1)}>Back</button>
         </div>
       </div>

@@ -119,7 +119,7 @@ export async function GetTask(id: number): Promise<[boolean, Task]> {
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Ok) {
       received = false;
-      throw new Error('Response Status: Unsuccessful');
+      throw new Error("Response Status: NOT 'OK'");
     }
     received = true;
     task = data;
@@ -127,6 +127,44 @@ export async function GetTask(id: number): Promise<[boolean, Task]> {
   } catch (err) {
     console.error(err);
     alert(`Error: Failed To Get Task [${id}]: ` + err);
+    throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
+
+export async function UpdateTask(
+  id: number,
+  newTask: Task
+): Promise<[boolean, Task]> {
+  let success: boolean;
+
+  try {
+    if (id !== newTask.id) {
+      console.error(
+        `Input ID and New Task's ID Do Not Match:\n\tInput: ${id}, Task: ${newTask.id}`
+      );
+      throw new Error(
+        `Input ID and New Task's ID Do Not Match:\n\tInput: ${id}, Task: ${newTask.id}`
+      );
+    }
+    const response = await axios.put<Task>(apiHost + `/tasks/${id}`, {
+      id: id,
+      name: newTask.name,
+      description: newTask.description,
+      created: newTask.created,
+      username: newTask.username,
+      active: newTask.active,
+    });
+    const taskData = response.data;
+    console.log('Raw API Response: ', taskData);
+    if (response.status !== HttpStatusCode.Accepted) {
+      success = false;
+      throw new Error(`Unexpected Response Status`);
+    }
+    success = true;
+    return [success, taskData];
+  } catch (err) {
+    console.error(err);
+    alert(`Error: Failed To Update Task [${id}]: ` + err);
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }

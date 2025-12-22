@@ -137,7 +137,18 @@ export default function Tasks() {
                             View
                           </button>
                           <button
-                            onClick={() => handleDelete(task.id!)}
+                            onClick={() => {
+                              if (
+                                account?.username !== task?.username &&
+                                !account?.admin
+                              ) {
+                                alert(
+                                  'You Do Not Have Permission To Delete This Task'
+                                );
+                                return;
+                              }
+                              handleDelete(task.id!);
+                            }}
                             className="w-3/5 self-center text-red-700"
                           >
                             Delete

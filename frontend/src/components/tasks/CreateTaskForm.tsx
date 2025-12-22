@@ -20,7 +20,7 @@ export default function CreateTaskForm() {
       alert('Title Cannot Be Empty!');
       return;
     } else if (titleIn.length > 60) {
-      alert('Title Cannot Be Than 60 Characters');
+      alert('Title Cannot Be More Than 60 Characters');
       return;
     }
 
