@@ -9,13 +9,13 @@ export default function EditTaskForm() {
   const { appState } = UseAppState();
   const { account } = UseAccount();
   const { setErrorState } = UseErrorState();
-  const [isTaskActive, setIsTaskActive] = useState<boolean>();
   const location = useLocation();
   const task: Task = location.state?.task;
   const [titleIn, setTitleValue] = useState<string>(task.name);
   const [descriptionIn, setDescriptionValue] = useState<string>(
     task.description
   );
+  const [isTaskActive, setIsTaskActive] = useState<boolean>(task.active);
 
   const handleUpdateTask = async () => {
     let success: boolean;
@@ -48,7 +48,7 @@ export default function EditTaskForm() {
         console.error(
           `success: ${success ? 'True' : 'False'} , taskResponse: ${taskResponse}`
         );
-        throw new Error('CreateTask() Response Has Unexpected Values!');
+        throw new Error('Update Task Had Unexpected Response Values!');
       }
       console.log(
         `success: ${success ? 'True' : 'False'} , taskResponse: ${taskResponse}`

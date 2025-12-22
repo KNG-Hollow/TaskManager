@@ -56,7 +56,14 @@ export default function Tasks() {
         if (!successful) {
           throw new Error('Failed To Get Tasks array');
         }
-        setTasks(fetchedTasks);
+        if (!account?.admin) {
+          const userTasks = fetchedTasks.filter(
+            (task) => task.username === account?.username
+          );
+          setTasks(userTasks);
+        } else {
+          setTasks(fetchedTasks);
+        }
       } catch (err) {
         console.error('Failed To Get Tasks Array: ' + err);
         alert('Failed To Get Tasks');
@@ -121,7 +128,11 @@ export default function Tasks() {
                         <td>{task.name}</td>
                         <td>{task.created.toLocaleString().slice(0, 10)}</td>
                         <td>{task.username}</td>
-                        <td>{task.active ? 'True' : 'False'}</td>
+                        {task.active ? (
+                          <td className="text-green-600">Yes</td>
+                        ) : (
+                          <td className="text-red-700">No</td>
+                        )}
                         <td
                           id="recent-tasks-buttons"
                           className="flex flex-row border-l-2 border-blue-400"

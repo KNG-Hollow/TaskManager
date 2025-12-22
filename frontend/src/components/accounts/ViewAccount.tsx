@@ -114,7 +114,7 @@ export default function Account() {
             <button
               onClick={() =>
                 navigate(`/edit-account/${viewAccount?.id}`, {
-                  state: { account: viewAccount },
+                  state: { account: viewAccount, id: viewAccount?.id },
                 })
               }
             >
@@ -126,14 +126,14 @@ export default function Account() {
               className="text-red-700"
               onClick={() => {
                 if (
-                  account?.username !== viewAccount?.username ||
+                  account?.username !== viewAccount?.username &&
                   !account?.admin
                 ) {
                   alert('You Do Not Have Permission To Delete This Account');
                   return;
                 }
                 handleDelete(viewAccount!.id!);
-                if (!account.admin || !appState?.admin) {
+                if (!account?.admin || !appState?.admin) {
                   window.location.reload();
                 }
                 navigate('/home');

@@ -4,8 +4,6 @@ import { type Task } from './utility/Interfaces';
 import { UseAccount, UseAppState, UseErrorState } from '../context/Context';
 import { DeleteTask, GetTasks } from './utility/ApiServices';
 
-// TODO If Not Admin, Only Show Tasks The Account User Created
-
 export default function Home() {
   const { account } = UseAccount();
   const { appState } = UseAppState();
@@ -58,7 +56,14 @@ export default function Home() {
         if (!successful) {
           throw new Error('Failed To Get Tasks array');
         }
-        setTasks(fetchedTasks);
+        if (!account?.admin) {
+          const userTasks = fetchedTasks.filter(
+            (task) => task.username === account?.username
+          );
+          setTasks(userTasks);
+        } else {
+          setTasks(fetchedTasks);
+        }
       } catch (err) {
         console.error('Failed To Get Tasks Array: ' + err);
         alert(`API Service Failed To Get Tasks:\n${err}`);
@@ -186,7 +191,11 @@ export default function Home() {
             <td>{task.name}</td>
             <td>{task.created.toLocaleString().slice(0, 10)}</td>
             <td>{task.username}</td>
-            <td>{task.active ? 'True' : 'False'}</td>
+            {task.active ? (
+              <td className="text-green-600">Yes</td>
+            ) : (
+              <td className="text-red-700">No</td>
+            )}
             <td
               id="recent-tasks-buttons"
               className="flex flex-row border-l-2 border-blue-400"
@@ -203,6 +212,10 @@ export default function Home() {
               </button>
               <button
                 onClick={() => {
+                  if (account?.username !== task.username && !account?.admin) {
+                    alert('You Do Not Have Permission To Delete This Task');
+                    return;
+                  }
                   handleDelete(task.id!);
                 }}
                 className="w-3/5 self-center text-red-700"

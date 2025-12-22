@@ -42,7 +42,7 @@ export async function AuthorizeUser(
 }
 
 export async function CreateAccount(
-  creatorAccount: Account,
+  initiatorAccount: Account,
   name: string,
   username: string,
   password: string,
@@ -59,7 +59,7 @@ export async function CreateAccount(
   };
 
   try {
-    if (!creatorAccount.admin) {
+    if (!initiatorAccount.admin) {
       successful = false;
       alert('You Do Have Have Permission To Create An Account');
       throw new Error("Initiator's Account Is Not Privileged");
@@ -200,7 +200,7 @@ export async function GetAccount(
   let account: Account;
 
   try {
-    if (initiatorAccount.id !== id || !initiatorAccount.admin) {
+    if (initiatorAccount.id !== id && !initiatorAccount.admin) {
       received = false;
       alert('You Do Have Have Permission To View This Account');
       throw new Error("Initiator's Account Is Not Privileged");
@@ -252,12 +252,12 @@ export async function UpdateAccount(
   let success: boolean;
 
   try {
-    if (initiatorAccount.id !== id || !initiatorAccount.admin) {
+    if (initiatorAccount.id !== id && !initiatorAccount.admin) {
       success = false;
       alert('You Do Have Have Permission To Update This Account');
       throw new Error("Initiator's Account Is Not Privileged");
     }
-    if (id !== newAccount.id) {
+    if (id !== newAccount.id && !initiatorAccount.admin) {
       console.error(
         `Input ID and New Account's ID Do Not Match:\n\tInput: ${id}, Account: ${newAccount.id}`
       );
@@ -266,7 +266,7 @@ export async function UpdateAccount(
       );
     }
     const response = await axios.put<Account>(apiHost + `/accounts/${id}`, {
-      id: id,
+      id: newAccount.id,
       name: newAccount.name,
       username: newAccount.username,
       password: newAccount.password,
@@ -333,7 +333,7 @@ export async function DeleteAccount(
   let success: boolean;
 
   try {
-    if (initiatorAccount.id !== id || !initiatorAccount.admin) {
+    if (initiatorAccount.id !== id && !initiatorAccount.admin) {
       success = false;
       alert('You Do Have Have Permission To Update This Account');
       throw new Error("Initiator's Account Is Not Privileged");
