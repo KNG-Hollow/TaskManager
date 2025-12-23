@@ -112,7 +112,7 @@ export default function ViewTask() {
             <button
               className="text-red-700"
               onClick={() => {
-                if (account?.username !== task?.username || !account?.admin) {
+                if (account?.username !== task?.username && !account?.admin) {
                   alert('You Do Not Have Permission To Delete This Task');
                   return;
                 }

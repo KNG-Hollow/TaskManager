@@ -113,7 +113,7 @@ export default function Home() {
       return (
         <div
           id="button-container-admin"
-          className="flex w-1/2 flex-col self-center"
+          className="mt-3 flex w-1/2 flex-col self-center"
         >
           <button
             onClick={() => {

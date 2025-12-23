@@ -43,14 +43,15 @@ export async function AuthorizeUser(
 
 export async function CreateAccount(
   initiatorAccount: Account,
+  id: number | null,
   name: string,
   username: string,
   password: string,
   admin: boolean
-): Promise<[boolean, HttpStatusCode]> {
+): Promise<[boolean, Account]> {
   let successful: boolean;
   const newAccount: Account = {
-    id: null,
+    id: id,
     name: name,
     username: username,
     password: password,
@@ -85,25 +86,26 @@ export async function CreateAccount(
     }
     console.log('Raw Response Data: ' + response.data);
     successful = true;
-    return [successful, response.status];
+    return [successful, response.data];
   } catch (err) {
     console.error(err);
-    alert(`Error: Failed To Create Task: ${err}`);
+    alert(`Error: Failed To Create Account: ${err}`);
     throw new Error('Failed To Query RESTapi: ' + err);
   }
 }
 
 export async function CreateTask(
   account: Account,
+  id: number | null,
   title: string,
   description: string
-): Promise<[boolean, HttpStatusCode]> {
+): Promise<[boolean, Task]> {
   let successful: boolean;
   const timestamp = new Date().toISOString();
   const username = account.username;
   const active = true;
   const task: Task = {
-    id: null,
+    id: id,
     name: title,
     description: description,
     created: timestamp,
@@ -133,7 +135,7 @@ export async function CreateTask(
     }
     console.log('Raw Response Data: ' + response.data);
     successful = true;
-    return [successful, response.status];
+    return [successful, response.data];
   } catch (err) {
     console.error(err);
     alert(`Error: Failed To Create Task: ${err}`);
