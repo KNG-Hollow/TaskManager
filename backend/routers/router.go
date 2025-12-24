@@ -15,7 +15,7 @@ func InitRouter() *gin.Engine {
 	// Define CORS settings
 	corsConfig := cors.Config{
 		AllowAllOrigins: true,
-		//AllowOrigins:     []string{"http://localhost:5173"}, // Adjust this to your React app's URL
+		//AllowOrigins:     []string{"localhost:*", "192.168.0.6:*", "192.168.0.66:*", "192.168.0.7:*", "192.168.0.77:*"}, // Adjust this to your React app's URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},

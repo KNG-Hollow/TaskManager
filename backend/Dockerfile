@@ -5,32 +5,30 @@ WORKDIR /app
 COPY . .
 RUN go mod download
 
-EXPOSE 8081
-EXPOSE 3306
-EXPOSE 5173
-
-ENV DBUSER=kng
-ENV DBPASS=Recon777
-ENV DBHOST=192.168.0.77
-ENV DBPORT=3306
-
+# Tests NOT Compatible With Github Actions
 #RUN cd ./services && go test -v && cd ../
 #RUN cd ./controllers && go test -v && cd ../
+
+# _____________________________________________________
+
+# TODO If Running Production Server            (Release)
+
+#ENV GIN_MODE=release
+
+# ____________________________________________________
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o server ./main.go
 RUN chmod +x server
 
 FROM alpine:latest
 WORKDIR /app
-COPY --from=builder /app/server .
+RUN apk update && apk --no-cache add ca-certificates
+RUN update-ca-certificates
+COPY --from=builder /app/server /app/taskmanager-backend.crt /app/taskmanager-backend.key ./
 
 EXPOSE 8081
+EXPOSE 8443
 EXPOSE 3306
 EXPOSE 5173
-
-ENV DBUSER=kng
-ENV DBPASS=Recon777
-ENV DBHOST=192.168.0.77
-ENV DBPORT=3306
 
 CMD [ "./server" ]

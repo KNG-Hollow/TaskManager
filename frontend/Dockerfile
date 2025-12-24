@@ -11,21 +11,21 @@ COPY . .
 
 # TODO If Running Development Server            (Development)
 
-#CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev"]
 
 #  ___________________________________________________________
 
-# TODO If Serving Built Assets With Nginx       (Release)
+# TODO If Serving Build Assets With Nginx       (Release)
 
 # Compile With Vite
-RUN npx vite build
+#RUN npx vite build
 # Use Minimal Base Image
-FROM nginx:alpine
+#FROM nginx:alpine
 # Delete any existing default configurations that may cause conflicts
-RUN rm /etc/nginx/conf.d/default.conf
+#RUN rm /etc/nginx/conf.d/default.conf
 # Copy your own configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+#COPY nginx.conf /etc/nginx/nginx.conf
 # Adjust according to your build output folder
-COPY --from=frontend-builder /app/dist /etc/nginx/html  
+#COPY --from=frontend-builder /app/dist /etc/nginx/html  
 
 #  ______________________________________________________________
