@@ -186,8 +186,8 @@ func DeleteTask(c *gin.Context) {
 
 func ValidateLogin(c *gin.Context) {
 	var loginDetails struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
+		Username string `form:"username" json:"username" binding:"required"`
+		Password string `form:"password" json:"password" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&loginDetails); err != nil {

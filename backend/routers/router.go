@@ -14,13 +14,13 @@ func InitRouter() *gin.Engine {
 
 	// Define CORS settings
 	corsConfig := cors.Config{
-		AllowAllOrigins: true,
-		//AllowOrigins:     []string{"localhost:*", "192.168.0.6:*", "192.168.0.66:*", "192.168.0.7:*", "192.168.0.77:*"}, // Adjust this to your React app's URL
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept"},
-		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		AllowAllOrigins:  true,
+		//AllowOrigins:  []string{"http://127.0.0.1", "https://127.0.0.1"}, // Adjust this to your React app's URL
+		AllowMethods:  []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:  []string{"Origin", "Content-Type", "Authorization", "Accept", "AllowOrigins"},
+		ExposeHeaders: []string{"Content-Length"},
+		MaxAge:        12 * time.Hour,
 	}
 	router.Use(cors.New(corsConfig))
 
@@ -38,11 +38,10 @@ func InitRouter() *gin.Engine {
 
 	router.NoRoute(func(c *gin.Context) {
 		if c.Request.Method == "OPTIONS" {
-			c.Header("Access-Control-Allow-Origin", "*") // You can specify specific origins if needed
-			c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 			c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization")
-			c.Status(204) // No Content
-			c.Status(http.StatusNoContent)
+			c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+			c.AbortWithStatus(http.StatusNoContent) // No Content
+			return
 		}
 	})
 

@@ -1,8 +1,6 @@
 import axios, { HttpStatusCode } from 'axios';
 import type { Account, Task } from './Interfaces';
 
-// TODO Add Password Encryption
-
 const apiHost: string = 'https://192.168.0.77:8443/api';
 
 export async function AuthorizeUser(

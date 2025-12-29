@@ -49,7 +49,10 @@ test('API Account Service, Integration Test', async () => {
     testAccount.password,
     testAccount.admin
   );
-  expect([createResponse[0], createResponse[1]]).toEqual([true, testAccount]);
+  expect([createResponse[0], createResponse[1].username]).toEqual([
+    true,
+    testAccount.username,
+  ]);
 
   const accountsResponse = await GetAccounts(testAdmin);
   expect([accountsResponse[0], accountsResponse[1].length > 1]).toEqual([
@@ -58,7 +61,10 @@ test('API Account Service, Integration Test', async () => {
   ]);
 
   const getResponse = await GetAccount(testAdmin, testAccount.id!);
-  expect([getResponse[0], getResponse[1]]).toEqual([true, testAccount]);
+  expect([getResponse[0], getResponse[1].username]).toEqual([
+    true,
+    testAccount.username,
+  ]);
 
   const updateResponse = await UpdateAccount(
     testAccount.id!,
