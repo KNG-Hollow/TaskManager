@@ -5,9 +5,10 @@ WORKDIR /app
 COPY . .
 RUN go mod download
 
-# Tests NOT Compatible With Github Actions
+# Tests NOT Compatible With Github Actions  ( THESE ARE CURRENTLY AUTOMATED WITH A 'PRE-COMMIT' SCRIPT )
 #RUN cd ./services && go test -v && cd ../
 #RUN cd ./controllers && go test -v && cd ../
+#
 
 # _____________________________________________________
 
@@ -24,7 +25,7 @@ FROM alpine:latest
 WORKDIR /app
 RUN apk update && apk --no-cache add ca-certificates
 RUN update-ca-certificates
-COPY --from=builder /app/server /app/taskmanager-backend.crt /app/taskmanager-backend.key ./
+COPY --from=builder /app/server /app/taskmanager-backend.crt /app/taskmanager-backend.key /app/taskmanager-jwt.key ./
 
 EXPOSE 8081
 EXPOSE 8443

@@ -2,6 +2,11 @@ package models
 
 import "time"
 
+type LoginDetails struct {
+	Username string `form:"username" json:"username" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
+}
+
 type Account struct {
 	ID       int64  `json:"id"`
 	Name     string `json:"name"`

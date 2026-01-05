@@ -7,9 +7,15 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
+	"os"
 	"strings"
+	"time"
 
 	"github.com/TaskManager/models"
+	jwt "github.com/appleboy/gin-jwt/v3"
+	"github.com/gin-gonic/gin"
+	gojwt "github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/argon2"
 )
 
@@ -123,13 +129,6 @@ func verifyPassword(storedHash, providedPassword string) (bool, error) {
 	return true, nil
 }
 
-func boolToBit(b bool) []byte {
-	if b {
-		return []byte{1}
-	}
-	return []byte{0}
-}
-
 func ValidateLogin(username string, password string) (*models.Account, error) {
 	db, err := Connect()
 	if err != nil {
@@ -186,4 +185,131 @@ func ValidateLogin(username string, password string) (*models.Account, error) {
 
 	fmt.Println("Successfully [Authenticated] Account:", username)
 	return account, nil
+}
+
+func boolToBit(b bool) []byte {
+	if b {
+		return []byte{1}
+	}
+	return []byte{0}
+}
+
+func InitJWT() *jwt.GinJWTMiddleware {
+	jwtKey, err := os.ReadFile("taskmanager-jwt.key")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("JWT KEY: %v", jwtKey)
+
+	return &jwt.GinJWTMiddleware{
+		Realm:       "gin jwt",
+		Key:         jwtKey,
+		Timeout:     time.Hour,
+		MaxRefresh:  time.Hour,
+		IdentityKey: "id",
+		PayloadFunc: payloadFunc(),
+
+		IdentityHandler: identityHandler(),
+		Authenticator:   authenticator(),
+		Authorizer:      authorizer(), // TODO
+		Unauthorized:    unauthorized(),
+		LogoutResponse:  logoutResponse(), // TODO
+		TokenLookup:     "header: Authorization, query: token, cookie: jwt",
+		// TokenLookup: "query:token",
+		// TokenLookup: "cookie:token",
+		TokenHeadName: "Bearer",
+		TimeFunc:      time.Now,
+	}
+}
+
+func payloadFunc() func(data any) gojwt.MapClaims {
+	return func(data any) gojwt.MapClaims {
+		if v, ok := data.(*models.Account); ok {
+			return gojwt.MapClaims{
+				"id":     v.ID,
+				"name":   v.Name,
+				"admin":  v.Admin,
+				"active": v.Active,
+			}
+		}
+		return gojwt.MapClaims{}
+	}
+}
+
+func identityHandler() func(c *gin.Context) any {
+	return func(c *gin.Context) any {
+		claims := jwt.ExtractClaims(c)
+		log.Printf("Claims extracted: %+v\n", claims)
+		return &models.Account{
+			ID:     int64(claims["id"].(float64)),
+			Name:   claims["name"].(string),
+			Admin:  claims["admin"].(bool),
+			Active: claims["active"].(bool),
+		}
+	}
+}
+
+func authenticator() func(c *gin.Context) (any, error) {
+	return func(c *gin.Context) (any, error) {
+		var loginVals models.LoginDetails
+		if err := c.ShouldBind(&loginVals); err != nil {
+			return "", jwt.ErrMissingLoginValues
+		}
+		username := loginVals.Username
+		password := loginVals.Password
+
+		acc, err := ValidateLogin(username, password)
+		if err != nil {
+			log.Panicf("failed to authenticate account: %s\n%s", username, err.Error())
+			return nil, err
+		}
+
+		if acc.Active {
+			log.Printf("Authenticated User: %v\n", acc)
+			return acc, nil
+		}
+
+		return nil, jwt.ErrFailedAuthentication
+	}
+}
+
+func authorizer() func(c *gin.Context, data any) bool {
+	return func(c *gin.Context, data any) bool {
+		log.Println("Authorizer Received This Raw Data:", data)
+		if v, ok := data.(*models.Account); ok {
+			log.Printf("User ID: %d, Active: %v, Admin: %v\n", v.ID, v.Active, v.Admin)
+			return v.Active
+		}
+		return false
+	}
+}
+
+func unauthorized() func(c *gin.Context, code int, message string) {
+	return func(c *gin.Context, code int, message string) {
+		c.JSON(code, gin.H{
+			"code":    code,
+			"message": message,
+		})
+	}
+}
+
+func logoutResponse() func(c *gin.Context) {
+	return func(c *gin.Context) {
+		claims := jwt.ExtractClaims(c)
+		user, exists := c.Get("id")
+
+		response := gin.H{
+			"code":    http.StatusOK,
+			"message": "Successfully logged out",
+		}
+
+		if len(claims) > 0 {
+			response["logged_out_user"] = claims["id"]
+		}
+		if exists {
+			response["user_info"] = user.(*models.Account).Username
+		}
+
+		c.JSON(http.StatusOK, response)
+	}
 }

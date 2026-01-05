@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
 import {
+  AuthorizeUserJWT,
   CreateAccount,
   CreateTask,
   DeleteAccount,
@@ -14,6 +15,7 @@ import {
 import type { Account, Task } from '../components/utility/Interfaces';
 
 test('API Account Service, Integration Test', async () => {
+  /*
   const testAdmin: Account = {
     id: 1,
     name: 'test admin',
@@ -22,6 +24,7 @@ test('API Account Service, Integration Test', async () => {
     admin: true,
     active: true,
   };
+  */
 
   const testAccount: Account = {
     id: 2,
@@ -41,8 +44,14 @@ test('API Account Service, Integration Test', async () => {
     active: true,
   };
 
+  const authResponse = await AuthorizeUserJWT('admin', 'password');
+  expect(authResponse[0]).eq(true, 'Authorization Check.');
+
+  const getResponse = await GetAccount(authResponse[2], authResponse[2].id);
+  expect([getResponse[0], getResponse[1].username]).toEqual([true, 'admin']);
+
   const createResponse = await CreateAccount(
-    testAdmin,
+    getResponse[1],
     testAccount.id,
     testAccount.name,
     testAccount.username,
@@ -54,21 +63,15 @@ test('API Account Service, Integration Test', async () => {
     testAccount.username,
   ]);
 
-  const accountsResponse = await GetAccounts(testAdmin);
+  const accountsResponse = await GetAccounts(getResponse[1]);
   expect([accountsResponse[0], accountsResponse[1].length > 1]).toEqual([
     true,
     true,
   ]);
 
-  const getResponse = await GetAccount(testAdmin, testAccount.id!);
-  expect([getResponse[0], getResponse[1].username]).toEqual([
-    true,
-    testAccount.username,
-  ]);
-
   const updateResponse = await UpdateAccount(
     testAccount.id!,
-    testAdmin,
+    getResponse[1],
     testUpdateAccount
   );
   expect([updateResponse[0], updateResponse[1]]).toEqual([
@@ -76,7 +79,10 @@ test('API Account Service, Integration Test', async () => {
     testUpdateAccount,
   ]);
 
-  const deleteResponse = await DeleteAccount(testAdmin, testUpdateAccount.id!);
+  const deleteResponse = await DeleteAccount(
+    getResponse[1],
+    testUpdateAccount.id!
+  );
   expect([deleteResponse[0], deleteResponse[1]]).toEqual([
     true,
     testAccount.id,
@@ -110,6 +116,9 @@ test('API Task Service, Integration Test', async () => {
     username: testTask.username,
     active: testTask.active,
   };
+
+  const authResponse = await AuthorizeUserJWT('admin', 'password');
+  expect(authResponse[0]).eq(true, 'Authorization Check.');
 
   const createResponse = await CreateTask(
     testAccount,
