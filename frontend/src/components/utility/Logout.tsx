@@ -12,12 +12,13 @@ export default function Logout() {
       return <p>Redirecting to login page...</p>;
     }
   };
-
+  // TODO Fix Logout Service
   useEffect(() => {
     if (!appState?.active) {
       navigate('/login');
       window.location.reload();
     }
+
     const handleLogout = () => {
       setAppState({ active: false, admin: false });
       navigate('/login');

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UseAccount, UseAppState, UseErrorState } from '../../context/Context';
 import { CreateAccount } from '../utility/ApiServices';
 import type { Account } from '../utility/Interfaces';
+import DOMPurify from 'dompurify';
 
 // TODO Only Allow Admin Accounts To Create Accounts
 
@@ -105,7 +106,10 @@ export default function CreateAccountForm() {
                 aria-label="name"
                 placeholder="..."
                 value={nameIn}
-                onChange={(e) => setNameValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setNameValue(sanitizedValue);
+                }}
               />
             </div>
             <div
@@ -120,7 +124,10 @@ export default function CreateAccountForm() {
                 aria-label="username"
                 placeholder="..."
                 value={usernameIn}
-                onChange={(e) => setUsernameValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setUsernameValue(sanitizedValue);
+                }}
               />
             </div>
             <div
@@ -136,7 +143,10 @@ export default function CreateAccountForm() {
                 aria-label="password"
                 placeholder="..."
                 value={passwordIn}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setPasswordValue(sanitizedValue);
+                }}
               />
             </div>
             <div

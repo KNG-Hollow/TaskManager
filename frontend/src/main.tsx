@@ -6,16 +6,19 @@ import {
   AccountProvider,
   AppStateProvider,
   ErrorStateProvider,
+  JWTProvider,
 } from './context/Context.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AppStateProvider>
-      <ErrorStateProvider>
-        <AccountProvider>
-          <App />
-        </AccountProvider>
-      </ErrorStateProvider>
-    </AppStateProvider>
+    <JWTProvider>
+      <AppStateProvider>
+        <ErrorStateProvider>
+          <AccountProvider>
+            <App />
+          </AccountProvider>
+        </ErrorStateProvider>
+      </AppStateProvider>
+    </JWTProvider>
   </StrictMode>
 );

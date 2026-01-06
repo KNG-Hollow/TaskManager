@@ -3,6 +3,7 @@ import { UseAccount, UseAppState, UseErrorState } from '../../context/Context';
 import { useEffect, useState } from 'react';
 import type { Account } from '../utility/Interfaces';
 import { UpdateAccount } from '../utility/ApiServices';
+import DOMPurify from 'dompurify';
 
 export default function EditAccountForm() {
   const navigate = useNavigate();
@@ -102,7 +103,10 @@ export default function EditAccountForm() {
                 aria-label="username"
                 placeholder="..."
                 value={usernameIn}
-                onChange={(e) => setUsernameValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setUsernameValue(sanitizedValue);
+                }}
               />
             </div>
             <div
@@ -118,7 +122,10 @@ export default function EditAccountForm() {
                 aria-label="password"
                 placeholder="..."
                 value={passwordIn}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setPasswordValue(sanitizedValue);
+                }}
               />
             </div>
             {account?.admin ? (

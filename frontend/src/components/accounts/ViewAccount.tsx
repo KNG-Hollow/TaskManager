@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UseAppState, UseAccount, UseErrorState } from '../../context/Context';
+import {
+  UseAppState,
+  UseAccount,
+  UseErrorState,
+  UseJWT,
+} from '../../context/Context';
 import type { Account } from '../utility/Interfaces';
 import { DeleteAccount, GetAccount } from '../utility/ApiServices';
 
@@ -8,6 +13,7 @@ export default function Account() {
   const navigate = useNavigate();
   const { appState } = UseAppState();
   const { account } = UseAccount();
+  const { payload } = UseJWT();
   const { setErrorState } = UseErrorState();
   const location = useLocation();
   const locationID: number = location.state?.id;
@@ -48,7 +54,7 @@ export default function Account() {
 
       try {
         const [fetchSuccessful, fetchedAccount] = await GetAccount(
-          account!,
+          payload!,
           id
         );
         successful = fetchSuccessful;
@@ -73,6 +79,7 @@ export default function Account() {
     }
   }, [
     account,
+    payload,
     appState?.active,
     appState?.admin,
     locationID,

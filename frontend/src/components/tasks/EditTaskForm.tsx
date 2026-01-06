@@ -3,6 +3,7 @@ import { UseAppState, UseAccount, UseErrorState } from '../../context/Context';
 import { useEffect, useState } from 'react';
 import type { Task } from '../utility/Interfaces';
 import { UpdateTask } from '../utility/ApiServices';
+import DOMPurify from 'dompurify';
 
 export default function EditTaskForm() {
   const navigate = useNavigate();
@@ -106,7 +107,10 @@ export default function EditTaskForm() {
                 cols={30}
                 placeholder="..."
                 value={titleIn}
-                onChange={(e) => setTitleValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setTitleValue(sanitizedValue);
+                }}
               />
             </div>
             <div
@@ -124,7 +128,10 @@ export default function EditTaskForm() {
                 cols={30}
                 placeholder="..."
                 value={descriptionIn}
-                onChange={(e) => setDescriptionValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setDescriptionValue(sanitizedValue);
+                }}
               />
             </div>
             <div

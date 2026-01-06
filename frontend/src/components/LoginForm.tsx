@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { AppState, Account } from './utility/Interfaces';
-import { UseAccount, UseAppState } from '../context/Context';
-import { AuthorizeUser } from './utility/ApiServices';
+import type { AppState, Account, JwtObject } from './utility/Interfaces';
+import { UseAccount, UseAppState, UseJWT } from '../context/Context';
+import { AuthorizeUserJWT, GetAccount } from './utility/ApiServices';
+import DOMPurify from 'dompurify';
 
 export default function Login() {
   const [, setActive] = useState<boolean>(false);
@@ -11,10 +12,13 @@ export default function Login() {
   const [passwordIn, setPasswordValue] = useState<string>('');
   const { setAppState } = UseAppState();
   const { setAccount } = UseAccount();
+  const { setToken, setPayload } = UseJWT();
   const navigate = useNavigate();
 
   let exists: boolean;
   let accountInfo: Account;
+  let payload: JwtObject;
+  let token: string;
 
   const handleLogin = async () => {
     if (usernameIn.trim().length === 0 || passwordIn.trim().length === 0) {
@@ -25,7 +29,11 @@ export default function Login() {
 
     console.log('Attempting To Login as: ', usernameIn);
     try {
-      [exists, accountInfo] = await AuthorizeUser(usernameIn, passwordIn);
+      //[exists, accountInfo] = await AuthorizeUser(usernameIn, passwordIn);
+      //console.log('Exists:', exists, 'Account Info:', accountInfo);
+      [exists, token, payload] = await AuthorizeUserJWT(usernameIn, passwordIn);
+      console.log('Exists:', exists, 'Token Payload:', payload);
+      [exists, accountInfo] = await GetAccount(payload, payload.id);
       console.log('Exists:', exists, 'Account Info:', accountInfo);
     } catch (err) {
       console.error(err);
@@ -41,9 +49,9 @@ export default function Login() {
       alert('Account Was Not Found In The Database!');
     } else {
       setActive(true);
-      setAdmin(accountInfo.admin);
+      setAdmin(payload.admin);
       appState.active = true;
-      appState.admin = accountInfo.admin;
+      appState.admin = payload.admin;
     }
 
     console.log(
@@ -51,6 +59,8 @@ export default function Login() {
       appState.active,
       appState.admin
     );
+    setToken(token);
+    setPayload(payload);
     setAppState(appState);
     setAccount(accountInfo);
 
@@ -82,7 +92,10 @@ export default function Login() {
                 aria-label="username"
                 placeholder="..."
                 value={usernameIn}
-                onChange={(e) => setUsernameValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setUsernameValue(sanitizedValue);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleLogin();
                 }}
@@ -99,7 +112,10 @@ export default function Login() {
                 aria-label="password"
                 placeholder="..."
                 value={passwordIn}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setPasswordValue(sanitizedValue);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleLogin();
                 }}

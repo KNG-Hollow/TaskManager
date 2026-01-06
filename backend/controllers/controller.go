@@ -185,10 +185,7 @@ func DeleteTask(c *gin.Context) {
 }
 
 func ValidateLogin(c *gin.Context) {
-	var loginDetails struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+	var loginDetails models.LoginDetails
 
 	if err := c.ShouldBindJSON(&loginDetails); err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)

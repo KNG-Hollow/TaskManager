@@ -1,9 +1,77 @@
 import axios, { HttpStatusCode } from 'axios';
-import type { Account, Task } from './Interfaces';
+import type { Account, Task, JwtObject, JwtResponse } from './Interfaces';
+import { jwtDecode } from 'jwt-decode';
 
-// TODO Add Password Encryption
+const apiHost: string = 'https://192.168.0.77:8443/api';
 
-const apiHost: string = 'http://192.168.0.77:8081/api';
+const api = axios.create({
+  baseURL: apiHost,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+});
+
+const decodeToken = (token: string): JwtObject | null => {
+  try {
+    return jwtDecode<JwtObject>(token);
+  } catch (error) {
+    console.error('Invalid token', error);
+    return null;
+  }
+};
+
+export async function AuthorizeUserJWT(
+  username: string,
+  password: string
+): Promise<[boolean, string, JwtObject]> {
+  let exists: boolean;
+  let jwtPayload: JwtObject = {} as JwtObject;
+  let token: string;
+
+  try {
+    const response = await axios.post<JwtResponse>(
+      apiHost + '/login',
+      {
+        username,
+        password,
+      },
+      {
+        //withCredentials: true,
+      }
+    );
+    console.log('Raw Response: ', response);
+    if (response.status !== HttpStatusCode.Ok) {
+      exists = false;
+      throw new Error('Response Status: Unsuccessful');
+    }
+    if (response.data === null) {
+      exists = false;
+      throw new Error('Authorization Failed / User Does Not Exist');
+    }
+
+    exists = true;
+    token = response.data.access_token;
+    jwtPayload = decodeToken(token)!;
+    api.interceptors.request.use(
+      (config) => {
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+      },
+      (error) => {
+        console.error('Request Interceptor Error:', error);
+        return Promise.reject(error);
+      }
+    );
+
+    return [exists, token, jwtPayload];
+  } catch (err) {
+    console.error(err);
+    alert(`Error: ${err}`);
+    throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
 
 export async function AuthorizeUser(
   username: string,
@@ -14,7 +82,7 @@ export async function AuthorizeUser(
 
   try {
     const response = await axios.post<Account>(
-      apiHost + '/auth',
+      apiHost + '/login',
       {
         username,
         password,
@@ -23,6 +91,7 @@ export async function AuthorizeUser(
         //withCredentials: true,
       }
     );
+    console.log('Raw Response: ', response);
     if (response.status !== HttpStatusCode.Ok) {
       exists = false;
       throw new Error('Response Status: Unsuccessful');
@@ -31,6 +100,7 @@ export async function AuthorizeUser(
       exists = false;
       throw new Error('User Does Not Exist');
     }
+
     exists = true;
     account = response.data;
     return [exists, account];
@@ -38,6 +108,24 @@ export async function AuthorizeUser(
     console.error(err);
     alert(`Error: ${err}`);
     throw new Error('Failed To Query RESTapi: ' + err);
+  }
+}
+
+// TODO Fix Logout Service
+export async function LogoutBackend(): Promise<void> {
+  try {
+    console.log('Attempting to logout of API Services...');
+    const response = await api.post(apiHost + '/auth/logout');
+    console.log('Raw Response: ', response);
+    if (response.status !== HttpStatusCode.Ok) {
+      console.error('Response Not: OK!');
+      throw new Error('Response Status: Unsuccessful');
+    }
+
+    return console.log('Successfully Logged Out!');
+  } catch (err) {
+    console.error(err);
+    alert('Failed To Logout Of Server: Please Refresh Or Close Your Tab');
   }
 }
 
@@ -65,8 +153,8 @@ export async function CreateAccount(
       alert('You Do Have Have Permission To Create An Account');
       throw new Error("Initiator's Account Is Not Privileged");
     }
-    const response = await axios.post<Account>(
-      apiHost + '/accounts',
+    const response = await api.post<Account>(
+      apiHost + '/auth/accounts',
       {
         id: newAccount.id,
         name: newAccount.name,
@@ -76,7 +164,7 @@ export async function CreateAccount(
         active: newAccount.active,
       },
       {
-        // withCredentials: true;
+        // withCredentials: true,
       }
     );
     if (response.status !== HttpStatusCode.Created) {
@@ -114,8 +202,8 @@ export async function CreateTask(
   };
 
   try {
-    const response = await axios.post<Task>(
-      apiHost + '/tasks',
+    const response = await api.post<Task>(
+      apiHost + '/auth/tasks',
       {
         id: task.id,
         name: task.name,
@@ -155,7 +243,9 @@ export async function GetAccounts(
       alert('You Do Have Have Permission To View All Accounts');
       throw new Error("Initiator's Account Is Not Privileged");
     }
-    const response = await axios.get<Account[]>(apiHost + '/accounts');
+    const response = await api.get<Account[]>(apiHost + '/auth/accounts', {
+      //withCredentials: true,
+    });
     const data = response.data;
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Ok) {
@@ -177,7 +267,9 @@ export async function GetTasks(): Promise<[boolean, Task[]]> {
   let tasks: Task[];
 
   try {
-    const response = await axios.get<Task[]>(apiHost + '/tasks');
+    const response = await api.get<Task[]>(apiHost + '/auth/tasks', {
+      //withCredentials: true,
+    });
     const data = response.data;
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Ok) {
@@ -195,19 +287,22 @@ export async function GetTasks(): Promise<[boolean, Task[]]> {
 }
 
 export async function GetAccount(
-  initiatorAccount: Account,
+  initiatorAccount: JwtObject,
   id: number
 ): Promise<[boolean, Account]> {
   let received: boolean;
   let account: Account;
 
   try {
+    console.log(`Attempting To Get Account [${id}] ...`);
     if (initiatorAccount.id !== id && !initiatorAccount.admin) {
       received = false;
       alert('You Do Have Have Permission To View This Account');
       throw new Error("Initiator's Account Is Not Privileged");
     }
-    const response = await axios.get<Account>(apiHost + `/accounts/${id}`);
+    const response = await api.get<Account>(apiHost + `/auth/accounts/${id}`, {
+      //withCredentials: true,
+    });
     const data = response.data;
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Ok) {
@@ -229,7 +324,9 @@ export async function GetTask(id: number): Promise<[boolean, Task]> {
   let task: Task;
 
   try {
-    const response = await axios.get<Task>(apiHost + `/tasks/${id}`);
+    const response = await api.get<Task>(apiHost + `/auth/tasks/${id}`, {
+      //withCredentials: true,
+    });
     const data = response.data;
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Ok) {
@@ -267,14 +364,20 @@ export async function UpdateAccount(
         `Input ID and New Account's ID Do Not Match:\n\tInput: ${id}, Account: ${newAccount.id}`
       );
     }
-    const response = await axios.put<Account>(apiHost + `/accounts/${id}`, {
-      id: newAccount.id,
-      name: newAccount.name,
-      username: newAccount.username,
-      password: newAccount.password,
-      admin: newAccount.admin,
-      active: newAccount.active,
-    });
+    const response = await api.put<Account>(
+      apiHost + `/auth/accounts/${id}`,
+      {
+        id: newAccount.id,
+        name: newAccount.name,
+        username: newAccount.username,
+        password: newAccount.password,
+        admin: newAccount.admin,
+        active: newAccount.active,
+      },
+      {
+        //withCredentials: true,
+      }
+    );
     const accountData = response.data;
     console.log('Raw API Response: ', accountData);
     if (response.status !== HttpStatusCode.Accepted) {
@@ -305,14 +408,20 @@ export async function UpdateTask(
         `Input ID and New Task's ID Do Not Match:\n\tInput: ${id}, Task: ${newTask.id}`
       );
     }
-    const response = await axios.put<Task>(apiHost + `/tasks/${id}`, {
-      id: id,
-      name: newTask.name,
-      description: newTask.description,
-      created: newTask.created,
-      username: newTask.username,
-      active: newTask.active,
-    });
+    const response = await api.put<Task>(
+      apiHost + `/auth/tasks/${id}`,
+      {
+        id: id,
+        name: newTask.name,
+        description: newTask.description,
+        created: newTask.created,
+        username: newTask.username,
+        active: newTask.active,
+      },
+      {
+        //withCredentials: true,
+      }
+    );
     const taskData = response.data;
     console.log('Raw API Response: ', taskData);
     if (response.status !== HttpStatusCode.Accepted) {
@@ -340,7 +449,12 @@ export async function DeleteAccount(
       alert('You Do Have Have Permission To Update This Account');
       throw new Error("Initiator's Account Is Not Privileged");
     }
-    const response = await axios.delete<number>(apiHost + `/accounts/${id}`);
+    const response = await api.delete<number>(
+      apiHost + `/auth/accounts/${id}`,
+      {
+        //withCredentials: true,
+      }
+    );
     const data = response.data;
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Accepted) {
@@ -360,7 +474,9 @@ export async function DeleteTask(id: number): Promise<[boolean, number]> {
   let success: boolean;
 
   try {
-    const response = await axios.delete<number>(apiHost + `/tasks/${id}`);
+    const response = await api.delete<number>(apiHost + `/auth/tasks/${id}`, {
+      //withCredentials: true,
+    });
     const data = response.data;
     console.log('Raw API Response: ', data);
     if (response.status !== HttpStatusCode.Accepted) {
