@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"slices"
 	"strings"
 	"time"
 
@@ -276,12 +277,33 @@ func authenticator() func(c *gin.Context) (any, error) {
 func authorizer() func(c *gin.Context, data any) bool {
 	return func(c *gin.Context, data any) bool {
 		log.Println("Authorizer Received This Raw Data:", data)
-		if v, ok := data.(*models.Account); ok {
+		v, ok := data.(*models.Account)
+		if !ok || !v.Active {
+			log.Panicf("Authentication Failed!")
 			log.Printf("User ID: %d, Active: %v, Admin: %v\n", v.ID, v.Active, v.Admin)
-			return v.Active
+			return false
 		}
-		return false
+
+		path := c.Request.URL.Path
+		userAccount := fmt.Sprintf("/api/auth/accounts/%d", v.ID)
+
+		if v.Admin {
+			return true
+		}
+
+		allowedPaths := []string{"/api/auth/tasks", userAccount, "/api/auth/logout"}
+		return slices.Contains(allowedPaths, path)
 	}
+	/*
+		return func(c *gin.Context, data any) bool {
+			log.Println("Authorizer Received This Raw Data:", data)
+			if v, ok := data.(*models.Account); ok {
+				log.Printf("User ID: %d, Active: %v, Admin: %v\n", v.ID, v.Active, v.Admin)
+				return v.Active
+			}
+			return false
+		}
+	*/
 }
 
 func unauthorized() func(c *gin.Context, code int, message string) {

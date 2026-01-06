@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UseAppState, UseAccount, UseErrorState } from '../../context/Context';
 import { CreateTask } from '../utility/ApiServices';
 import type { Task } from '../utility/Interfaces';
+import DOMPurify from 'dompurify';
 
 export default function CreateTaskForm() {
   const navigate = useNavigate();
@@ -84,7 +85,10 @@ export default function CreateTaskForm() {
                 cols={30}
                 placeholder="..."
                 value={titleIn}
-                onChange={(e) => setTitleValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setTitleValue(sanitizedValue);
+                }}
               />
             </div>
             <div
@@ -102,7 +106,10 @@ export default function CreateTaskForm() {
                 cols={30}
                 placeholder="..."
                 value={descriptionIn}
-                onChange={(e) => setDescriptionValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setDescriptionValue(sanitizedValue);
+                }}
               />
             </div>
           </div>

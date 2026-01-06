@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { AppState, Account, JwtObject } from './utility/Interfaces';
 import { UseAccount, UseAppState, UseJWT } from '../context/Context';
 import { AuthorizeUserJWT, GetAccount } from './utility/ApiServices';
+import DOMPurify from 'dompurify';
 
 export default function Login() {
   const [, setActive] = useState<boolean>(false);
@@ -91,7 +92,10 @@ export default function Login() {
                 aria-label="username"
                 placeholder="..."
                 value={usernameIn}
-                onChange={(e) => setUsernameValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setUsernameValue(sanitizedValue);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleLogin();
                 }}
@@ -108,7 +112,10 @@ export default function Login() {
                 aria-label="password"
                 placeholder="..."
                 value={passwordIn}
-                onChange={(e) => setPasswordValue(e.target.value)}
+                onChange={(e) => {
+                  const sanitizedValue = DOMPurify.sanitize(e.target.value);
+                  setPasswordValue(sanitizedValue);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleLogin();
                 }}

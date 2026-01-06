@@ -16,6 +16,7 @@ import CreateTaskForm from './components/tasks/CreateTaskForm';
 import EditAccountForm from './components/accounts/EditAccountForm';
 import EditTaskForm from './components/tasks/EditTaskForm';
 
+// TODO Add Routing Protection Using The AppState Context
 export default function App() {
   const { appState } = UseAppState();
 

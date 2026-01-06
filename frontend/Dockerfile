@@ -24,7 +24,7 @@ CMD ["npm", "run", "dev"]
 # Delete any existing default configurations that may cause conflicts
 #RUN rm /etc/nginx/conf.d/default.conf
 # Copy your own configuration
-#COPY nginx.conf /etc/nginx/nginx.conf
+#COPY nginx.conf taskmanager-backend.crt taskmanager-backend.key /etc/nginx/
 # Adjust according to your build output folder
 #COPY --from=frontend-builder /app/dist /etc/nginx/html  
 

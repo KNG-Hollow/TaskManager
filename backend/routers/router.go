@@ -39,6 +39,12 @@ func InitSecureRouter(engine *gin.Engine, jwt *jwt.GinJWTMiddleware) *gin.Engine
 	// Public Routes
 	engine.POST("/api/login", jwt.LoginHandler)
 	engine.POST("/api/refresh", jwt.RefreshHandler)
+	engine.GET("/api/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  "healthy",
+			"message": "The api service is running!",
+		})
+	})
 
 	// Protected Routes
 	auth := engine.Group("/api/auth", jwt.MiddlewareFunc())
