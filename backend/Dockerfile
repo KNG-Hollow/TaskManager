@@ -9,7 +9,7 @@ RUN go mod download
 
 # TODO If Running Production Server            (Release)
 
-#ENV GIN_MODE=release
+ENV GIN_MODE=release
 
 # ____________________________________________________
 
