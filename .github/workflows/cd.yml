@@ -16,6 +16,8 @@ jobs:
 
       - name: Set up SSL Certificate
         run: |
+          mkdir ./security
+          mkdir ./ssl
           echo "$JWT_KEY" | base64 --decode > ./security/jwtkey.key
           echo "$SSL_CERTIFICATE" | base64 --decode > ./ssl/certificate.crt
           echo "$SSL_PRIVATE_KEY" | base64 --decode > ./ssl/private.key
