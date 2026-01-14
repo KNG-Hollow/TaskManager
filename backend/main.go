@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"time"
 
 	router "github.com/TaskManager/routers"
@@ -60,7 +61,9 @@ func main() {
 	server := router.InitSecureRouter(engine, authMiddleware)
 
 	//server.Run(":8081")		// HTTP Server
-	err = server.RunTLS(":8443", "taskmanager-backend.crt", "taskmanager-backend.key")
+	tlscrt := os.Getenv("TLSCRT")
+	tlskey := os.Getenv("TLSKEY")
+	err = server.RunTLS(":8443", tlscrt, tlskey)
 	if err != nil {
 		log.Fatal("Failed To Run Server: ", err)
 	}

@@ -196,7 +196,9 @@ func boolToBit(b bool) []byte {
 }
 
 func InitJWT() *jwt.GinJWTMiddleware {
-	jwtKey, err := os.ReadFile("taskmanager-jwt.key")
+	jwtKeyFile := os.Getenv("JWTKEY")
+	log.Println("JWTKEY File Location:", jwtKeyFile)
+	jwtKey, err := os.ReadFile(jwtKeyFile)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -43,5 +43,3 @@ dist-ssr
 
 # SQL
 TaskManager.session.sql
-
-.*

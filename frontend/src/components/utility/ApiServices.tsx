@@ -2,7 +2,10 @@ import axios, { HttpStatusCode } from 'axios';
 import type { Account, Task, JwtObject, JwtResponse } from './Interfaces';
 import { jwtDecode } from 'jwt-decode';
 
-const apiHost: string = 'https://192.168.0.77:8443/api';
+// TODO Add APIHOST ENV
+//const apiHost: string = 'https://192.168.0.77:8443/api';
+const apiHost: string =
+  import.meta.env.VITE_API_URL || 'https://localhost:8443/api';
 
 const api = axios.create({
   baseURL: apiHost,
@@ -128,6 +131,8 @@ export async function LogoutBackend(): Promise<void> {
     alert('Failed To Logout Of Server: Please Refresh Or Close Your Tab');
   }
 }
+
+// TODO Add Health Check To /api/health
 
 export async function CreateAccount(
   initiatorAccount: Account,
